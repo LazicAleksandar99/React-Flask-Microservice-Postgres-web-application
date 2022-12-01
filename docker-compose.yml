@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web: 
+    build: flask
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
+    ports:
+      - '5000:5000'
+    environment: 
+      FLASK_APP: main
+      FLASK_ENV: development #lazy load u development modu zato je dobar
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres  #://user:password@db je ime 16 linija:5432/DB_name
+    volumes:
+      - ./backend:/app          #moj kod gdje se nalazi mapiram na workdir 
+  db:
+    image: postgres
+    ports: 
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local  
+  
