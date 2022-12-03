@@ -1,7 +1,7 @@
 version: '3'
 services:
   web: 
-    build: flask
+    build: flask #ovo mozda?
     # flask requires SIGINT to stop gracefully
     # (default stop signal from Compose is SIGTERM)
     stop_signal: SIGINT
@@ -12,7 +12,7 @@ services:
       FLASK_ENV: development #lazy load u development modu zato je dobar
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres  #://user:password@db je ime 16 linija:5432/DB_name
     volumes:
-      - ./flask:/app          #moj kod gdje se nalazi mapiram na workdir fodler flask
+      - ./backend:/app          #moj kod gdje se nalazi mapiram na workdir fodler flask
   db:
     image: postgres
     ports: 
