@@ -68,3 +68,32 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+1.Assets folder - it consists of images and styling files
+
+2.Layouts Folder - As the name says, it contains layouts available to the whole project like header, footer, etc.
+                   We can store the header, footer, or sidebar code here and call it.
+
+3.Components folder
+
+4.Pages Folder -The files in the pages folder indicate the route of the react application.
+                Each file in this folder contains its route. A page can contain its subfolder. 
+                Each page has its state and is usually used to call an async operation. 
+                It usually consists of various components grouped.
+
+5.Middleware Folder - This folder consists of middleware that allows for side effects in the application. 
+                      It is used when we are using redux with it. Here we keep all our custom middleware.
+
+6.Routes Folder - This folder consists of all routes of the application. 
+                  It consists of private, protected, and all types of routes. Here we can even call our sub-route.
+
+
+7.Config Folder - This folder consists of a configuration file where we store environment variables in config.js. 
+                  We will use this file to set up multi-environment configurations in your application.
+
+8.Services Folder - This folder will be added if we use redux in your project. 
+                    Inside it, there are 3 folders named actions, reducers, and constant subfolders to manage states. 
+                    The actions and reducers will be called in almost all the pages, so create actions, reducers & constants according to pages name.
+
+9.Utils Folder - Utils folder consists of some repeatedly used functions that are commonly used in the project. 
+                 It should contain only common js functions & objects like dropdown options, regex condition, data formatting, etc.
