@@ -1,7 +1,7 @@
 version: '3'
 services:
-  web: 
-    build: flask #ovo mozda?
+  backend: 
+    build: backend #u koji folder da udje i nadje Dockerfile
     # flask requires SIGINT to stop gracefully
     # (default stop signal from Compose is SIGTERM)
     stop_signal: SIGINT
@@ -13,6 +13,17 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres  #://user:password@db je ime 16 linija:5432/DB_name
     volumes:
       - ./backend:/app          #moj kod gdje se nalazi mapiram na workdir fodler flask
+    depends_on:
+      - db
+  frontend:
+    build: frontend
+    ports:
+      - '4002:3000'
+    volumes:
+      - ./frontend:/usr/src/app
+    depends_on:
+      - db
+      - backend
   db:
     image: postgres
     ports: 
