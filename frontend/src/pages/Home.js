@@ -17,7 +17,7 @@ const Home= () =>{
             </div>
          </div>
       </div>
-      <div className="container text-center" style={{paddingTop: "2%"}}>
+      <div className="container text-center" style={{paddingTop: "2%", paddingBottom: "2%"}}>
         
         <div className="rounded border border-primary row" style={{paddingTop: "1rem"}}>
           <div className="col">
