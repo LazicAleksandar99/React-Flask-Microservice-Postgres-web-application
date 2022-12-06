@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import SearchBar from './SearchBar';
 
 const Navbar= () =>{
-  //let navigate = useNavigate()
-
   return (
       <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary" aria-label="Fifth navbar example">
+        <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" aria-label="Fifth navbar example" style={{borderColor: "#0d6efd"}}>
             <div className="container-fluid">
             <Link  className="navbar-brand" to="/home">LOGO</Link>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,17 +13,29 @@ const Navbar= () =>{
             </button>
 
             <div className="collapse navbar-collapse" id="navbarsExample05">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                    <Link  className="nav-link active" aria-current="page" to="/products">Products</Link>
-                </li>
-                <li className="nav-item">
-                    <Link  className="nav-link" to="/products">Products</Link >
-                </li>
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0 py-1">
+                    <li className="nav-item">
+                        <Link  className="nav-link" aria-current="page" to="/home">Home</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link  className="nav-link" to="/products">Products</Link >
+                    </li>
                 </ul>
-                <form role="search">
-                <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
-                </form>
+                <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 py-1">
+                    <SearchBar ></SearchBar>
+                </ul>
+                <ul className="navbar-nav ms-auto py-1">
+                    <li className="nav-item dropdown">
+                        <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="bi bi-person-circle"></i>
+                        </Link>
+                        <ul className="dropdown-menu  dropdown-menu-lg-end">
+                            <li><Link className="dropdown-item" to="/profile"><i className="bi bi-person-gear"> Profile</i></Link></li>
+                            <li><hr className="dropdown-divider"/></li>
+                            <li><Link className="dropdown-item" to="/signin"><i className="bi bi-box-arrow-right"> Log off</i></Link></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
             </div>
         </nav>
