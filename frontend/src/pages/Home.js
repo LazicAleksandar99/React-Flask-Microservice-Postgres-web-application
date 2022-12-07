@@ -1,75 +1,95 @@
 import React from 'react';
 import "../assets/styles/Home.css"
-import news from "../assets/images/news.png"
+import NewsCard from '../components/NewsCard';
+
 const Home= () =>{
 
   return (
     <div>
-      <div className="headline-background">
-         <div className="container">
-            <div className='row'>
-              <div className='col'>
-                <img className="headline-img" src={news} alt="slika"></img>
-              </div>
-              <div className='col'>
-                <h1 className="headline-text">For new informations <br></br> Stay connected</h1>
-              </div>
-            </div>
-         </div>
-      </div>
-      <div className="container text-center" style={{paddingTop: "2%", paddingBottom: "2%"}}>
-        
-        <div className="rounded border border-primary row" style={{paddingTop: "1rem"}}>
-          <div className="col">
-          </div>
-          <div className="col-8">
+      <div id="myCarousel" className="carousel slide" data-bs-ride="carousel">
+        <div className="carousel-indicators">
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div className="carousel-inner">
+          <div className="carousel-item active">
+            <svg className="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#0d6efd"/></svg>
 
-            <div className="row">
-              <div className="col-3">
-              <img src="http://placekitten.com/150/150" alt="ljubi brat" style={{borderRadius: "50%"}}></img>
-              </div>
-              <div className="col-9">
-                <h5>Nvidia GPU 4.512v DISCOUNT!</h5>
-                <p style={{textAlign: "left"}}>ovdje ide text asjdlsa;kdjas; ajs ;a;skd j;asd jasd;k asjl;d jaslk;dkjl; askjl;asdjk asdj lhfg askjdhas ksahd asdl asldh</p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-3">
-              <img src="http://placekitten.com/150/150" alt="ljubi brat" style={{borderRadius: "50%"}}></img>
-              </div>
-              <div className="col-9">
-                <h5>Nvidia GPU 4.512v DISCOUNT!</h5>
-                <p style={{textAlign: "left"}}>ovdje ide text asjdlsa;kdjas; ajs ;a;skd j;asd jasd;k asjl;d jaslk;dkjl; askjl;asdjk asdj lhfg askjdhas ksahd asdl asldh</p>
-              </div>
-            </div><div className="row">
-              <div className="col-3">
-              <img src="http://placekitten.com/150/150" alt="ljubi brat" style={{borderRadius: "50%"}}></img>
-              </div>
-              <div className="col-9">
-                <h5>Nvidia GPU 4.512v DISCOUNT!</h5>
-                <p style={{textAlign: "left"}}>ovdje ide text asjdlsa;kdjas; ajs ;a;skd j;asd jasd;k asjl;d jaslk;dkjl; askjl;asdjk asdj lhfg askjdhas ksahd asdl asldh</p>
-              </div>
-            </div><div className="row">
-              <div className="col-3">
-              <img src="http://placekitten.com/150/150" alt="ljubi brat" style={{borderRadius: "50%"}}></img>
-              </div>
-              <div className="col-9">
-                <h5>Nvidia GPU 4.512v DISCOUNT!</h5>
-                <p style={{textAlign: "left"}}>ovdje ide text asjdlsa;kdjas; ajs ;a;skd j;asd jasd;k asjl;d jaslk;dkjl; askjl;asdjk asdj lhfg askjdhas ksahd asdl asldh</p>
-              </div>
-            </div><div className="row">
-              <div className="col-3">
-              <img src="http://placekitten.com/150/150" alt="ljubi brat" style={{borderRadius: "50%"}}></img>
-              </div>
-              <div className="col-9">
-                <h5>Nvidia GPU 4.512v DISCOUNT!</h5>
-                <p style={{textAlign: "left"}}>ovdje ide text asjdlsa;kdjas; ajs ;a;skd j;asd jasd;k asjl;d jaslk;dkjl; askjl;asdjk asdj lhfg askjdhas ksahd asdl asldh</p>
+            <div className="container">
+              <div className="carousel-caption text-start">
+                <h1>Example headline.</h1>
+                <p>Some representative placeholder content for the first slide of the carousel.</p>                <br></br>
+
+                {/* <p><a className="btn btn-lg btn-primary" href="#">Sign up today</a></p> */}
               </div>
             </div>
           </div>
-          <div className="col">
+          <div className="carousel-item">
+            <svg className="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/3000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#0d6efd"/></svg>
+
+            <div className="container">
+              <div className="carousel-caption">
+                <h1>Another example headline.</h1>
+                <p>Some representative placeholder content for the second slide of the carousel.</p>                <br></br>
+
+                {/* <p><a className="btn btn-lg btn-primary" href="#">Learn more</a></p> */}
+              </div>
+            </div>
+          </div>
+          <div className="carousel-item">
+            <svg className="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#0d6efd"/></svg>
+
+            <div className="container">
+              <div className="carousel-caption text-end">
+                <h1>One more for good measure.</h1>
+                <p>Some representative placeholder content for the third slide of this carousel.</p>
+                <br></br>
+                {/* <p><a className="btn btn-lg btn-primary" href="#">Browse gallery</a></p> */}
+              </div>
+            </div>
           </div>
         </div>
+        <button className="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button className="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
+      </div>
+      {/* NEW START HERE */}
+      <div className="container marketing">
+        <hr className="featurette-divider"/>
+
+        <div className="row featurette">
+          <div className="col-md-7 order-md-2">
+            <h2 className="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span className="text-muted">See for yourself.</span></h2>
+            <p className="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
+          </div>
+          <div className="col-md-5 order-md-1">
+            <svg className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+
+          </div>
+        </div>
+
+        <hr className="featurette-divider"/>
+
+        <div className="row featurette">
+          <div className="col-md-7">
+            <h2 className="featurette-heading fw-normal lh-1">And lastly, this one. <span className="text-muted">Checkmate.</span></h2>
+            <p className="lead">And yes, this is the last block of representative placeholder content. Again, not really intended to be actually read, simply here to give you a better view of what this would look like with some actual content. Your content.</p>
+          </div>
+          <div className="col-md-5">
+            <svg className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+
+          </div>
+        </div>
+
+        <hr className="featurette-divider"/>
+
+        <NewsCard></NewsCard>
       </div>
     </div>
     
