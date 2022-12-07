@@ -1,10 +1,9 @@
-from flask import Flask
-
-app = Flask(__name__)
+from app import app, db
+from app.models.user import User
 
 @app.route('/')
 def hello_world():
-    return "<p>HELLO WORLD MAMU!</p>"
+    return "<p>HELLOO</p"
 
 
     

@@ -9,10 +9,11 @@ services:
       - '5000:5000'
     environment: 
       FLASK_APP: main
+      FLASK_DEBUG: true
       FLASK_ENV: development #lazy load u development modu zato je dobar
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres  #://user:password@db je ime 16 linija:5432/DB_name
     volumes:
-      - ./backend:/app          #moj kod gdje se nalazi mapiram na workdir fodler flask
+      - ./backend:/backend          #moj kod gdje se nalazi mapiram na workdir fodler flask
     depends_on:
       - db
   #frontend:
