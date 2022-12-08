@@ -1,8 +1,50 @@
-import React from 'react';
-import { Link } from "react-router-dom";
-import '../assets/styles/Signin.css'
+import React, { useRef, useState, useEffect} from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import '../assets/styles/Signin.css';
+import axios from '../api/axios';
+const SIGNIN_URL = '/sign/in';
+
+
 
 const SignIn= () =>{
+  let navigate = useNavigate()
+
+  const emailRef = useRef();
+  const errorRef = useRef();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  
+  useEffect(() => {
+    emailRef.current.focus();
+  }, [])
+
+  useEffect(() => {
+    setError('');
+  }, [email,password])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try{
+      const response = await axios.post(SIGNIN_URL,
+        JSON.stringify({ email, password }),
+        {
+            headers: { 'Content-Type': 'application/json' }
+        }
+      );
+      localStorage.setItem('token', response?.data?.token);
+      setEmail('');
+      setPassword('');
+      console.log(JSON.stringify(response?.data));
+      if(response?.data?.token){
+        navigate('/home')
+      }
+    } catch(errorMsg){
+      console.log(errorMsg)
+    }
+  }
 
   return (
       <div className='text-center'>
@@ -17,29 +59,42 @@ const SignIn= () =>{
               </div>
 
               <div className="d-flex justify-content-center align-items-center h-custom-2 px-5 ms-xl-4 mt-1 pt-5 pt-xl-0 mt-xl-n5">
-
-                <form style={{width:"23rem"}}>
+                <p ref={errorRef} className={error ? "errMsg": "offscreen"} aria-live="assertive">{error}</p>
+                <form onSubmit={handleSubmit} style={{width:"23rem"}}>
 
                   <h3 className="fw-normal mb-3 pb-3" style={{letterSpacing:"1px"}}>Log in</h3>
 
                   <div className="form-outline mb-4">
-                    <input type="email" id="form2Example18" className="form-control form-control-lg" />
-                    <label className="form-label" htmlFor="form2Example18">Email address</label>
+                    <input 
+                      ref={emailRef} 
+                      type="email" 
+                      id="emailID" 
+                      className="form-control form-control-lg" 
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
+                    />
+                    <label className="form-label" htmlFor="emailID">Email address</label>
                   </div>
 
                   <div className="form-outline mb-4">
-                    <input type="password" id="form2Example28" className="form-control form-control-lg" />
-                    <label className="form-label" htmlFor="form2Example28">Password</label>
+                    <input 
+                      type="password" 
+                      id="passwordID" 
+                      className="form-control form-control-lg"
+                      onChange={(e) => setPassword(e.target.value)} 
+                      value={password}
+                      required
+                    />
+                    <label className="form-label" htmlFor="passwordID">Password</label>
                   </div>
 
                   <div className="pt-1 mb-4">
-                    <button className="btn btn-primary btn-lg btn-block" type="button">Login</button>
+                    <button className="btn btn-primary btn-lg btn-block" type="submit">Login</button>
                   </div>
 
                   <p>Don't have an account? <Link to="/signup" className="link-primary">Register here</Link></p>
 
                 </form>
-
               </div>
 
             </div>

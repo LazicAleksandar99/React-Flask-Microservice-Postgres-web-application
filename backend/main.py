@@ -1,12 +1,9 @@
 from app import app, db
 from app.models.user import User
+from app.routes.sign import bp_sign
 
-@app.route('/')
-def hello_world():
-    return "<p>HELLOO</p"
+app.register_blueprint(bp_sign)
 
-
-    
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
