@@ -1,28 +1,23 @@
-import React, { useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect, useContext} from 'react';
+import AuthContext from '../context/AuthProvider';
 import { Link, useNavigate } from "react-router-dom";
 import '../assets/styles/Signin.css';
 import axios from '../api/axios';
 const SIGNIN_URL = '/sign/in';
 
-
-
 const SignIn= () =>{
   let navigate = useNavigate()
 
+  const { setAuth } = useContext(AuthContext);
   const emailRef = useRef();
-  const errorRef = useRef();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   
   useEffect(() => {
     emailRef.current.focus();
   }, [])
 
-  useEffect(() => {
-    setError('');
-  }, [email,password])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,15 +29,26 @@ const SignIn= () =>{
             headers: { 'Content-Type': 'application/json' }
         }
       );
-      localStorage.setItem('token', response?.data?.token);
+      const token = response?.data?.token;
+      localStorage.setItem('token', token);
+      const roles = response?.data?.roles;
+      setAuth({ email, roles, token });
       setEmail('');
       setPassword('');
-      console.log(JSON.stringify(response?.data));
+
       if(response?.data?.token){
         navigate('/home')
       }
     } catch(errorMsg){
-      console.log(errorMsg)
+      //moram ovdje ivdjet koji erori
+      if (!errorMsg?.response) {
+    } else if (errorMsg.response?.status === 400) {
+        alert('Missing Username or Password')
+    } else if (errorMsg.response?.status === 401) {
+        alert('Unauthorized')
+    } else {
+        alert('Login Failed')
+    }
     }
   }
 
@@ -59,7 +65,6 @@ const SignIn= () =>{
               </div>
 
               <div className="d-flex justify-content-center align-items-center h-custom-2 px-5 ms-xl-4 mt-1 pt-5 pt-xl-0 mt-xl-n5">
-                <p ref={errorRef} className={error ? "errMsg": "offscreen"} aria-live="assertive">{error}</p>
                 <form onSubmit={handleSubmit} style={{width:"23rem"}}>
 
                   <h3 className="fw-normal mb-3 pb-3" style={{letterSpacing:"1px"}}>Log in</h3>
