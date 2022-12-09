@@ -39,9 +39,9 @@ const SignIn= () =>{
       else{
         const token = response?.data?.token;
         localStorage.setItem('token', token);
-        const roles = JSON.parse(atob(token.split('.')[1])).role
-
-        setAuth({ email, roles, token });
+        const role = JSON.parse(atob(token.split('.')[1])).role
+        console.log(role)
+        setAuth({ email, role, token });
         setEmail('');
         setPassword('');
 
