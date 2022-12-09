@@ -1,15 +1,18 @@
-import React, { useRef, useState, useEffect, useContext} from 'react';
-import AuthContext from '../context/AuthProvider';
-import { Link, useNavigate } from "react-router-dom";
+import React, { useRef, useState, useEffect} from 'react';
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import '../assets/styles/Signin.css';
 import axios from '../api/axios';
+import useAuth from '../hooks/useAuth';
 const SIGNIN_URL = '/sign/in';
 
 const SignIn= () =>{
-  let navigate = useNavigate()
 
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
   const emailRef = useRef();
+
+  const navigate = useNavigate()
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/home';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,16 +32,24 @@ const SignIn= () =>{
             headers: { 'Content-Type': 'application/json' }
         }
       );
-      const token = response?.data?.token;
-      localStorage.setItem('token', token);
-      const roles = response?.data?.roles;
-      setAuth({ email, roles, token });
-      setEmail('');
-      setPassword('');
 
-      if(response?.data?.token){
-        navigate('/home')
+      if(response?.data?.error){
+        alert(response?.data?.error)
       }
+      else{
+        const token = response?.data?.token;
+        localStorage.setItem('token', token);
+        const roles = JSON.parse(atob(token.split('.')[1])).role
+
+        setAuth({ email, roles, token });
+        setEmail('');
+        setPassword('');
+
+        if(response?.data?.token){
+          navigate(from, {replace: true})
+        }
+      }
+
     } catch(errorMsg){
       //moram ovdje ivdjet koji erori
       if (!errorMsg?.response) {

@@ -1,14 +1,18 @@
 import React from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { useLocation, Navigate, Outlet} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import useAuth from "../hooks/useAuth";
 
 const PrivateRoutes = () =>{
   
-  let auth = {'token': localStorage.getItem("token")}
+    const { auth } = useAuth();
+    const location = useLocation();
 
-  return (
-      auth.token ? <div> <Navbar/> <Outlet/> <Footer/> </div>: <Navigate to="/signin"/>
+    return (
+      auth?.email
+          ? <div> <Navbar/> <Outlet/> <Footer/> </div>
+          : <Navigate to="/signin" state={{ from: location }} replace/>
   );
 }
 export default PrivateRoutes;

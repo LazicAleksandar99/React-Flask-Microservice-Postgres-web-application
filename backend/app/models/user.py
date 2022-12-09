@@ -1,5 +1,6 @@
 from app import db
 from marshmallow import Schema, fields
+from werkzeug.security import generate_password_hash, check_password_hash
 #//customer, creator, admin
 
 class User(db.Model):
@@ -8,15 +9,22 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique= True)
     birthday = db.Column(db.DateTime, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(10), nullable=False, default="customer")
+    password = db.Column(db.String(120), nullable=False)
+    role = db.Column(db.String(10), nullable=False)
+    verified = db.Column(db.String(10), nullable=False)
 
-    def __init__(self, name, last_name, birthday, email, password):
+    def __init__(self, name, last_name, birthday, email, role, password, verified):
         self.name = name
         self.last_name = last_name        
         self.birthday = birthday
         self.email = email
-        self.password = password
+        self.role = role
+        self.password = generate_password_hash(password)
+        self.verified = verified
+
+
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 class UserSchema(Schema):
@@ -27,3 +35,4 @@ class UserSchema(Schema):
     birthday = fields.DateTime()
     password = fields.Str()
     role = fields.Str()
+    verified = fields.Str()

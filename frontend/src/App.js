@@ -1,6 +1,6 @@
 import './App.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Products from './pages/Products';
 import SignIn from './pages/Signin';
@@ -11,7 +11,6 @@ import Profile from './pages/Profile';
 function App() {
   return (
     <div className="App">
-      <Router>
         <Routes>      
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} exact/>
@@ -23,7 +22,6 @@ function App() {
           <Route path="/signup" element={<SignUp />} exact/>
           <Route path="*" element={<SignIn />} />
         </Routes>
-      </Router>
     </div>
   );
 }
