@@ -7,17 +7,19 @@ import SignIn from './pages/Signin';
 import SignUp from './pages/Signup';
 import PrivateRoutes from './routes/PrivateRoutes';
 import Profile from './pages/Profile';
+import Unauthorized from './pages/Unauthorized';
 
 function App() {
   return (
     <div className="App">
         <Routes>      
-          <Route element={<PrivateRoutes />}>
+          <Route element={<PrivateRoutes allowedRoles={["customer","creator","admin"]} />}>
             <Route path="/" element={<Home />} exact/>
             <Route path="/home" element={<Home /> }/>            
             <Route path="/products" element={<Products /> }/>
             <Route path="/profile" element={<Profile /> }/>
           </Route>
+          <Route path="/unauthorized" element={<Unauthorized /> }/>
           <Route path="/signin" element={<SignIn />} exact/>
           <Route path="/signup" element={<SignUp />} exact/>
           <Route path="*" element={<SignIn />} />

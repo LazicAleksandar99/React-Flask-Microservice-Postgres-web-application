@@ -4,15 +4,17 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import useAuth from "../hooks/useAuth";
 
-const PrivateRoutes = () =>{
+const PrivateRoutes = ({ allowedRoles }) =>{
   
     const { auth } = useAuth();
     const location = useLocation();
 
     return (
-      auth?.email
+          allowedRoles?.includes(auth?.role)
           ? <div> <Navbar/> <Outlet/> <Footer/> </div>
-          : <Navigate to="/signin" state={{ from: location }} replace/>
+          : auth?.token
+            ? <Navigate to="/unauthorized" state={{ from: location }} replace/> 
+            : <Navigate to="/signin" state={{ from: location }} replace/>
   );
 }
 export default PrivateRoutes;

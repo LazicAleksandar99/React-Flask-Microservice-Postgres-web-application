@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import '../assets/styles/Signin.css';
 import axios from '../api/axios';
 import useAuth from '../hooks/useAuth';
+
 const SIGNIN_URL = '/sign/in';
 
 const SignIn= () =>{
@@ -24,23 +25,24 @@ const SignIn= () =>{
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try{
+      console.log('pokusaj trja')
       const response = await axios.post(SIGNIN_URL,
         JSON.stringify({ email, password }),
         {
             headers: { 'Content-Type': 'application/json' }
         }
       );
-
-      if(response?.data?.error){
+      
+      if(response?.data[0]?.error){
         alert(response?.data?.error)
+        console.log(response?.data?.error);
       }
       else{
         const token = response?.data?.token;
         localStorage.setItem('token', token);
         const role = JSON.parse(atob(token.split('.')[1])).role
-        console.log(role)
         setAuth({ email, role, token });
         setEmail('');
         setPassword('');
@@ -52,14 +54,15 @@ const SignIn= () =>{
 
     } catch(errorMsg){
       //moram ovdje ivdjet koji erori
+      console.log("u kecu sam")
       if (!errorMsg?.response) {
-    } else if (errorMsg.response?.status === 400) {
-        alert('Missing Username or Password')
-    } else if (errorMsg.response?.status === 401) {
-        alert('Unauthorized')
-    } else {
-        alert('Login Failed')
-    }
+      } else if (errorMsg.response?.status === 400) {
+          alert('Missing Username or Password')
+      } else if (errorMsg.response?.status === 401) {
+          alert('Unauthorized')
+      } else {
+          alert('Login Failed')
+      }
     }
   }
 
