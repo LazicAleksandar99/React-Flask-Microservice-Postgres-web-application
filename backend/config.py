@@ -8,3 +8,4 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.environ.get("SECRET_KEY")
     JWT_ALGORITHM = "HS256"
+    CORS_HEADERS = 'Content-Type'

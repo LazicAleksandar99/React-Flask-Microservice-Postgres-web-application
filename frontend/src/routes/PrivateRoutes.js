@@ -3,16 +3,21 @@ import { useLocation, Navigate, Outlet} from "react-router-dom";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import useAuth from "../hooks/useAuth";
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../context/authSlice';
+
 
 const PrivateRoutes = ({ allowedRoles }) =>{
-  
-    const { auth } = useAuth();
+    const token = useSelector(selectCurrentToken)  
+  //  const { auth } = useAuth();
     const location = useLocation();
 
+  //  const role = auth?.token ? JSON.parse(atob(auth.token.split('.')[1])).role : []
+    const role = token ? JSON.parse(atob(token.split('.')[1])).role : []
     return (
-          allowedRoles?.includes(auth?.role)
+          allowedRoles?.includes(role)
           ? <div> <Navbar/> <Outlet/> <Footer/> </div>
-          : auth?.token
+          : token
             ? <Navigate to="/unauthorized" state={{ from: location }} replace/> 
             : <Navigate to="/signin" state={{ from: location }} replace/>
   );

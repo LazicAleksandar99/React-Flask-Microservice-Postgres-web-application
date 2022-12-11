@@ -1,23 +1,25 @@
 import React, { useRef, useState, useEffect} from 'react';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import '../assets/styles/Signin.css';
 import axios from '../api/axios';
-import useAuth from '../hooks/useAuth';
+//import useAuth from '../hooks/useAuth';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../context/authSlice';
+import { useLoginMutation } from '../context/authApiSlice';
 
 const SIGNIN_URL = '/sign/in';
 
 const SignIn= () =>{
 
-  const { setAuth } = useAuth();
+  //const { setAuth } = useAuth();
   const emailRef = useRef();
-
-  const navigate = useNavigate()
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/home';
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const navigate = useNavigate()
+
+  const [login, { isLoading }] = useLoginMutation()
+  const dispatch = useDispatch()
+
   useEffect(() => {
     emailRef.current.focus();
   }, [])
@@ -25,32 +27,49 @@ const SignIn= () =>{
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try{
-      console.log('pokusaj trja')
-      const response = await axios.post(SIGNIN_URL,
-        JSON.stringify({ email, password }),
-        {
-            headers: { 'Content-Type': 'application/json' }
-        }
-      );
-      
-      if(response?.data[0]?.error){
-        alert(response?.data?.error)
-        console.log(response?.data?.error);
-      }
-      else{
-        const token = response?.data?.token;
-        localStorage.setItem('token', token);
-        const role = JSON.parse(atob(token.split('.')[1])).role
-        setAuth({ email, role, token });
-        setEmail('');
-        setPassword('');
 
-        if(response?.data?.token){
-          navigate(from, {replace: true})
-        }
-      }
+    try{
+      // console.log('pokusaj trja')
+      // const response = await axios.post(SIGNIN_URL,
+      //   JSON.stringify({ email, password }),
+      //   {
+      //       headers: { 'Content-Type': 'application/json' }
+      //   }
+      // );
+      
+      // if(response?.data[0]?.error){
+      //   alert(response?.data?.error)
+      //   console.log(response?.data?.error);
+      // }
+      // else{
+      //   const token = response?.data?.token ? response.data.token : undefined;
+      //   localStorage.setItem('token', token);
+
+      //   setAuth({ email, token });
+      //   setEmail('');
+      //   setPassword('');
+
+      //   if(response?.data?.token){
+      //     navigate(from, {replace: true})
+      //   }
+      // }
+
+
+      console.log('prije')
+      const response = await login({email,password})
+      // const response = await axios.post(SIGNIN_URL,
+      //   JSON.stringify({ email, password }),
+      //   {
+      //       headers: { 'Content-Type': 'application/json' }
+      //   }
+      // );
+
+      console.log('poslje')
+      console.log(response?.data)
+      dispatch(setCredentials({...response?.data}))
+      setEmail('')
+      setPassword('')
+      navigate('/home')
 
     } catch(errorMsg){
       //moram ovdje ivdjet koji erori
@@ -66,8 +85,8 @@ const SignIn= () =>{
     }
   }
 
-  return (
-      <div className='text-center'>
+  const content = isLoading ? <h1>Loading...</h1> : (
+    <div className='text-center'>
        <section className="vh-100">
         <div className="container-fluid">
           <div className="row">
@@ -125,6 +144,8 @@ const SignIn= () =>{
         </div>
       </section>
     </div>
-  );
+  )
+
+  return content
 }
 export default SignIn;
