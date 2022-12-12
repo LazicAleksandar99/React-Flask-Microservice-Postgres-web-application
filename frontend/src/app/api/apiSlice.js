@@ -4,7 +4,7 @@ import { setCredentials, logOut} from '../../context/authSlice'
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:5000',
     prepareHeaders: (headers, { getState }) => {
-        //headers.set('Content-Type', 'application/json')
+        headers.set('Content-Type', 'application/json')
         //headers.set("Accept", "application/json");
         
         const token = getState().auth.tokenc
@@ -12,8 +12,7 @@ const baseQuery = fetchBaseQuery({
             headers.set("authorization", `Bearer ${token}`)
         }
         return headers
-    },
-    credentials: 'include'
+    }
 })
 
 const baseQueryIfExpiredToken = async (args, api, extraOptions) => {

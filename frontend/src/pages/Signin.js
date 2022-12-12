@@ -60,7 +60,8 @@ const SignIn= () =>{
       // const response = await axios.post(SIGNIN_URL,
       //   JSON.stringify({ email, password }),
       //   {
-      //       headers: { 'Content-Type': 'application/json' }
+      //       headers: { 'Content-Type': 'application/json' },
+              ////withCredentials: true
       //   }
       // );
 
