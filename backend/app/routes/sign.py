@@ -25,17 +25,9 @@ def sign_in():
         additional_claims = {"role": user.role}
         token = create_access_token(identity=email,additional_claims = additional_claims)
         response = jsonify({'token': token}, 200)
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Headers", "*")
-        response.headers.add("Access-Control-Allow-Methods", "*")
-        response.headers.add("Access-Control-Allow-Credentials", 'true')
         return response
     else:
         response = jsonify({"error": "Bad username or password"}, 401)
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Headers", "*")
-        response.headers.add("Access-Control-Allow-Methods", "*")
-        response.headers.add("Access-Control-Allow-Credentials", 'true')
         return response
 
 

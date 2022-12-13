@@ -29,33 +29,6 @@ const SignIn= () =>{
     e.preventDefault();
 
     try{
-      // console.log('pokusaj trja')
-      // const response = await axios.post(SIGNIN_URL,
-      //   JSON.stringify({ email, password }),
-      //   {
-      //       headers: { 'Content-Type': 'application/json' }
-      //   }
-      // );
-      
-      // if(response?.data[0]?.error){
-      //   alert(response?.data?.error)
-      //   console.log(response?.data?.error);
-      // }
-      // else{
-      //   const token = response?.data?.token ? response.data.token : undefined;
-      //   localStorage.setItem('token', token);
-
-      //   setAuth({ email, token });
-      //   setEmail('');
-      //   setPassword('');
-
-      //   if(response?.data?.token){
-      //     navigate(from, {replace: true})
-      //   }
-      // }
-
-
-      console.log('prije')
       const response = await login({email,password})
       // const response = await axios.post(SIGNIN_URL,
       //   JSON.stringify({ email, password }),
@@ -64,13 +37,16 @@ const SignIn= () =>{
               ////withCredentials: true
       //   }
       // );
+      if(response?.data[0]?.error){
+        alert(response?.data?.error)
+      }
+      else if(response?.data[0]?.token){
+        dispatch(setCredentials({...response?.data[0]}))
+        setEmail('')
+        setPassword('')
+        navigate('/home')
+      }
 
-      console.log('poslje')
-      console.log(response?.data)
-      dispatch(setCredentials({...response?.data}))
-      setEmail('')
-      setPassword('')
-      navigate('/home')
 
     } catch(errorMsg){
       //moram ovdje ivdjet koji erori
