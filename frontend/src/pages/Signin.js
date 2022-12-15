@@ -29,6 +29,7 @@ const SignIn= () =>{
     e.preventDefault();
 
     try{
+      console.log('prije')
       const response = await login({email,password})
       // const response = await axios.post(SIGNIN_URL,
       //   JSON.stringify({ email, password }),
@@ -37,6 +38,7 @@ const SignIn= () =>{
               ////withCredentials: true
       //   }
       // );
+      console.log('psolje')
       if(response?.data[0]?.error){
         alert(response?.data?.error)
       }
@@ -51,6 +53,7 @@ const SignIn= () =>{
     } catch(errorMsg){
       //moram ovdje ivdjet koji erori
       console.log("u kecu sam")
+      console.log(errorMsg)
       if (!errorMsg?.response) {
       } else if (errorMsg.response?.status === 400) {
           alert('Missing Username or Password')

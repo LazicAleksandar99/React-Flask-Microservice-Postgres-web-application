@@ -1,32 +1,40 @@
-import { configureStore} from "@reduxjs/toolkit"
-import { apiSlice } from "./api/apiSlice"
-import authReducer from '../context/authSlice'
-import {presistStore, presistReducer} from "redux-persist";
-import storage from 'redux-presist/lib/storage'
-import {createStore, applyMiddleware} from 'redux'
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { apiSlice } from "./api/apiSlice";
+import authReducer from '../context/authSlice';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+import thunk from 'redux-thunk';
 
 
-
-const presistConfig = {
-    key: "main-root",
+const persistConfig = {
+    key: 'root',
     storage,
-}
+  }
 
-const presistedReducer = presistReducer(presistConfig, authReducer)
+const persistedAuthReducer = persistReducer(persistConfig, authReducer)
 
-const storeTwo = createStore(presistedReducer,applyMiddleware)
+const presistedCombiend = combineReducers({
+        auth: authReducer,
+        [apiSlice.reducerPath]: apiSlice.reducer})
 
-const Presistor=presistStore(storeTwo);
+// const presistedApiSlice = persistReducer(persistConfig, apiSlice.reducer)
+
+const presistedReducer = persistReducer(persistConfig, presistedCombiend)
+// export const store = configureStore({
+//     reducer: {
+//         [apiSlice.reducerPath]: apiSlice.reducer,
+//         auth: authReducer
+//     },
+//     middleware: getDefaultMiddleware =>
+//         getDefaultMiddleware().concat(apiSlice.middleware),
+//     devTools: true
+// })
 
 export const store = configureStore({
-    reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
-        auth: authReducer
-    },
+    reducer: presistedReducer,
     middleware: getDefaultMiddleware =>
-        getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools: true
-})
+             getDefaultMiddleware().concat(apiSlice.middleware),
+    devTools: true,
+  })
 
-export {Presistor}
-export default storeTwo;
+export const persistor = persistStore(store)

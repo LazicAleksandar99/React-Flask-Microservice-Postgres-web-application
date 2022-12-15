@@ -5,8 +5,10 @@ import App from './App';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import { AuthProvider } from './context/AuthProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { store } from './app/store'
+import { persistor, store } from './app/store'
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 
 
@@ -14,11 +16,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<App />}></Route>
         </Routes>
       </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

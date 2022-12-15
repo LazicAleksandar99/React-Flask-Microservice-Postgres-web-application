@@ -1,8 +1,18 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchBar from './SearchBar';
+import { useDispatch } from 'react-redux';
+import { logOut } from '../context/authSlice';
 
 const Navbar= () =>{
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate
+
+  const handleClick = () => {
+    dispatch(logOut())
+    navigate('/signin')
+  }
   return (
       <div>
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" aria-label="Fifth navbar example" style={{borderColor: "#0d6efd"}}>
@@ -32,7 +42,7 @@ const Navbar= () =>{
                         <ul className="dropdown-menu  dropdown-menu-lg-end">
                             <li><Link className="dropdown-item" to="/profile"><i className="bi bi-person-gear"> Profile</i></Link></li>
                             <li><hr className="dropdown-divider"/></li>
-                            <li><Link className="dropdown-item" to="/signin"><i className="bi bi-box-arrow-right"> Log off</i></Link></li>
+                            <li><Link className="dropdown-item" onClick={handleClick}><i className="bi bi-box-arrow-right"> Log off</i></Link></li>
                         </ul>
                     </li>
                 </ul>
