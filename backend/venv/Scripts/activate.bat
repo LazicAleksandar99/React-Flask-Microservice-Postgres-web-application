@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\acopr\Desktop\WEB2_PROJECT\React-Flask-Microservice-Postgres-web-application\backend\venv
+set VIRTUAL_ENV=C:\Users\acopr\OneDrive\Desktop\GIT\React-Flask-Postgres-Docker-WebApplication\backend\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

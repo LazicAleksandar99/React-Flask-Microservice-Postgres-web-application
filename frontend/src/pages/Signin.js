@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect} from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import '../assets/styles/Signin.css';
-import axios from '../api/axios';
-//import useAuth from '../hooks/useAuth';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../context/authSlice';
 import { useLoginMutation } from '../context/authApiSlice';
@@ -11,7 +9,6 @@ const SIGNIN_URL = '/sign/in';
 
 const SignIn= () =>{
 
-  //const { setAuth } = useAuth();
   const emailRef = useRef();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,21 +21,12 @@ const SignIn= () =>{
     emailRef.current.focus();
   }, [])
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try{
-      console.log('prije')
       const response = await login({email,password})
-      // const response = await axios.post(SIGNIN_URL,
-      //   JSON.stringify({ email, password }),
-      //   {
-      //       headers: { 'Content-Type': 'application/json' },
-              ////withCredentials: true
-      //   }
-      // );
-      console.log('psolje')
+      
       if(response?.data[0]?.error){
         alert(response?.data?.error)
       }
@@ -52,7 +40,6 @@ const SignIn= () =>{
 
     } catch(errorMsg){
       //moram ovdje ivdjet koji erori
-      console.log("u kecu sam")
       console.log(errorMsg)
       if (!errorMsg?.response) {
       } else if (errorMsg.response?.status === 400) {
@@ -66,7 +53,7 @@ const SignIn= () =>{
   }
 
   const content = isLoading ? <h1>Loading...</h1> : (
-    <div className='text-center'>
+    <div className='text-center'> 
        <section className="vh-100">
         <div className="container-fluid">
           <div className="row">

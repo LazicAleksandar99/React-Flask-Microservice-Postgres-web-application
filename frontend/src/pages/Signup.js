@@ -3,9 +3,7 @@ import { Link, useNavigate} from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "../../node_modules/react-datepicker/dist/react-datepicker.css"
 import "../assets/styles/Signup.css"
-import axios from '../api/axios';
-
-const SIGNUP_URL = '/sign/up';
+import { useRegistrationMutation } from '../context/registrationApiSlice';
 
 
 const SignUp= () =>{
@@ -19,6 +17,9 @@ const SignUp= () =>{
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
   const [birthday, setBirthday] = useState(new Date());
+
+  const [register, { isLoading }] = useRegistrationMutation()
+
   
   useEffect(() => {
     nameRef.current.focus();
@@ -28,12 +29,8 @@ const SignUp= () =>{
     e.preventDefault();
 
     try{
-      const response = await axios.post(SIGNUP_URL,
-        JSON.stringify({ name, last_name, email, birthday, password}),
-        {
-            headers: { 'Content-Type': 'application/json' }
-        }
-      );
+      const response = await register({name, last_name, email, birthday, password})
+
       if(response?.data[0]?.error){
         alert(response?.data[0]?.error)
       }
@@ -55,9 +52,9 @@ const SignUp= () =>{
     }
   }
 
-  return (
-      <div className='bg-image'>
-       <section className="vh-100 ">
+  const content = isLoading ? <h1>Loading...</h1> : (
+    <div className='bg-image'>
+      <section className="vh-100 ">
         <div className="container h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-lg-12 col-xl-11">
@@ -172,6 +169,8 @@ const SignUp= () =>{
         </div>
       </section>
     </div>
-  );
+  )
+
+  return content
 }
 export default SignUp;
