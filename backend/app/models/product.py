@@ -1,4 +1,4 @@
-from app import db
+from app.extensions import db
 from marshmallow import Schema, fields
 
 class Product(db.Model):

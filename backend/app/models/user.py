@@ -1,4 +1,4 @@
-from app import db
+from app.extensions import db
 from marshmallow import Schema, fields
 from werkzeug.security import generate_password_hash, check_password_hash
 #//customer, creator, admin
