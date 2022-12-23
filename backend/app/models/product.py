@@ -14,7 +14,7 @@ class Product(db.Model):
         self.description = description        
         self.picture = picture        
         self.price = price
-        self.owner = owner
+        self.owner_id = owner
 
 
 class ProductSchema(Schema):
@@ -23,4 +23,4 @@ class ProductSchema(Schema):
     description = fields.Str()
     picture = fields.Str()
     price = fields.Number()
-    owner = fields.Number()
+    owner_id = fields.Number()
