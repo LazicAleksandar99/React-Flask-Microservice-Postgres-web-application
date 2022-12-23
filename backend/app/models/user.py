@@ -12,6 +12,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     role = db.Column(db.String(10), nullable=False)
     verified = db.Column(db.String(10), nullable=False)
+    products = db.relationship('Product', backref='user', cascade = 'all, delete-orphan')
 
     def __init__(self, name, last_name, birthday, email, role, password, verified):
         self.name = name

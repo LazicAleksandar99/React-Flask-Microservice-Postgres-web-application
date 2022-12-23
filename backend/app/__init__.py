@@ -16,6 +16,12 @@ def create_app(config_class=Config):
     jwt = JWTManager(app)
     db.init_app(app)
     migrate.init_app(app, db)
+    
+    #routes
     from app.routes.sign import bp_sign
     app.register_blueprint(bp_sign)
+
+    from app.routes.products import bp_products
+    app.register_blueprint(bp_products)
+
     return app
