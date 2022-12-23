@@ -3,6 +3,9 @@ import "../assets/styles/Home.css"
 import NewsCard from '../components/NewsCard';
 
 const Home= () =>{
+
+
+  
   return (
     <div>
       <div id="myCarousel" className="carousel slide" data-bs-ride="carousel">

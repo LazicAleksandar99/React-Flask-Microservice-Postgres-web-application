@@ -5,8 +5,6 @@ import { useDispatch } from 'react-redux';
 import { setCredentials } from '../context/authSlice';
 import { useLoginMutation } from '../context/authApiSlice';
 
-const SIGNIN_URL = '/sign/in';
-
 const SignIn= () =>{
 
   const emailRef = useRef();
@@ -22,7 +20,7 @@ const SignIn= () =>{
   }, [])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
 
     try{
       const response = await login({email,password})
