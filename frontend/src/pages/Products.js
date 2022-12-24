@@ -1,70 +1,98 @@
 import React , { useState, useEffect} from 'react';
-import ProductCard from '../components/ProductCard';
-import { useGetAllProductsQuery } from '../context/product/productApiSlice';
+import ProductList from '../components/ProductList';
+import Pagination from '../components/Pagination';
+import { useGetAllProductsQuery,useAddProductMutation } from '../context/product/productApiSlice';
 import { useDispatch } from 'react-redux';
-import { setProducts, selectCurrentProducts } from '../context/product/productSlice';
+import { setProducts } from '../context/product/productSlice';
 
 const Products= () =>{
   //jedan if sa divom ako je prazno da napravi div bijeli visine 800 i tekstom u sredini
   //const [theproducts, setTheProducts] = useState('')
-  const [getAllProducts] = useGetAllProductsQuery()
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(8);
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+
+  const [addProduct] = useAddProductMutation();
+  
+  const {
+    data: products,
+    isLoading,
+    isSuccess,
+    isError,
+    error 
+  } = useGetAllProductsQuery(undefined, {refetchOnMountOrArgChange: true});
+
   const dispatch = useDispatch()
 
-  useEffect( async () => {
-    console.log("GRIZMAN")
-    try{
-      const response = await getAllProducts()
-      console.log("KILJAN MEBAPE")
-      console.log(response)
-      if(response?.data[0]?.error){
-        alert(response?.data[0]?.error)
-      }
-      else if(response?.data[0]?.msg){
-        alert(response?.data[0]?.msg)
-      }
-      else if(response?.data[0]?.token){
-        dispatch(setProducts({...response?.data[0]}))
-        ////setTheProducts(selectCurrentProducts())
-        console.log("UPAMEKANO")
-        console.log(response)
-      }
-    }catch(msg){
-
+  useEffect(  () => {
+    if(!isLoading){
+      dispatch(setProducts(products.products));
     }
-  }, [])
+  }, [isLoading])
+
+  const addNewProduct = () => {
+    const name="Ime"
+    const description="opis" 
+    const picture="slika" 
+    const price = 22
+    const response = addProduct({name,description, picture, price})
+  };
+
+  let content;
+
+  if(isLoading){
+    content = <p>Loading...</p>
+  }else if(isSuccess){
+    
+    console.log(products)
+      const currentPosts = products.products.slice(firstPostIndex, lastPostIndex);
+      content = 
+      <div className="container text-center" style={{paddingTop: "4%", paddingBottom: "2%"}}>       
+        <div className=" row" style={{paddingTop: "1rem"}}>
+          <div className="col-2" style={{backgroundColor: "#0d6efd", height: 800}}>
+            <button onClick={addNewProduct}> Add new</button>
+          </div>
+          <div className="col-9">
+            <ProductList productsData={currentPosts} />
+              <Pagination
+                  totalPosts={products.products.length}
+                  postsPerPage={postsPerPage}
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+              />
+          </div>
+        </div>
+      </div>
+      
+    // content =
+    // <div className="container text-center" style={{paddingTop: "4%", paddingBottom: "2%"}}>       
+    //   <div className=" row" style={{paddingTop: "1rem"}}>
+    //     <div className="col-2" style={{backgroundColor: "#0d6efd", height: 800}}>
+
+    //     </div>
+    //     <div className="col-9">
+    //       <div className='row' style={{paddingBottom: "7%"}}>
+    //         {
+    //           products.products.map(product => {
+    //                 <div className="col-lg-4">
+    //                 <ProductCard></ProductCard>
+    //                 </div>
+    //           })
+    //         }
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+  }else if(isError){
+    content = <p>{error}</p>
+  }
 
   return (
-    <div className="container text-center" style={{paddingTop: "4%", paddingBottom: "2%"}}>       
-    <div className=" row" style={{paddingTop: "1rem"}}>
-      <div className="col-2" style={{backgroundColor: "#0d6efd", height: 800}}>
-
-      </div>
-      <div className="col-9">
-        <div className='row' style={{paddingBottom: "7%"}}>
-          <div className="col-lg-4">
-            <ProductCard></ProductCard>
-          </div>
-          <div className="col-lg-4">
-              <ProductCard></ProductCard>
-          </div>
-          <div className="col-lg-4">
-              <ProductCard></ProductCard>
-          </div>
-        </div>
-        <div className='row'>
-          <div className="col-lg-4">
-            <ProductCard></ProductCard>
-          </div>
-          <div className="col-lg-4">
-              <ProductCard></ProductCard>
-          </div>
-          <div className="col-lg-4">
-              <ProductCard></ProductCard>
-          </div>
-        </div>
-      </div>
+    <div>
+      {content}
     </div>
-  </div>
-  );
+    
+  )
 }
 export default Products;

@@ -6,7 +6,7 @@ const productSlice = createSlice({
     reducers: {
         setProducts: (state, action) => {
             //const { products } = action.payload
-            state.products.push(action.payload)
+            state.products = state.products.concat(action.payload)
         },
         clearProducts: (state) => {
             state.products = []

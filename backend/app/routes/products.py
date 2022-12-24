@@ -42,5 +42,6 @@ def get_all_products():
     current_user = get_jwt_identity()
     #dalje s ovim treba provjera da li customer ili admin.... 
     products = Product.query.all()
+  #  print(products.length)
     all_products = products_schema.dump(products) # mora shema jer preko query.all ne moze jesinify
     return jsonify(products = all_products)
