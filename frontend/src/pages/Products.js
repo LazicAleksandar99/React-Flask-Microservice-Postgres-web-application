@@ -3,13 +3,15 @@ import ProductList from '../components/ProductList';
 import Pagination from '../components/Pagination';
 import { useGetAllProductsQuery,useAddProductMutation } from '../context/product/productApiSlice';
 import { useDispatch } from 'react-redux';
-import { setProducts } from '../context/product/productSlice';
+import axios from '../api/axios'
 
 const Products= () =>{
   //jedan if sa divom ako je prazno da napravi div bijeli visine 800 i tekstom u sredini
   //const [theproducts, setTheProducts] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(8);
+  const [postsPerPage, setPostsPerPage] = useState(4);
+  const [image, setImage] = useState('');
+  const [imageURL, setImageURL] = useState('');
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
 
@@ -25,21 +27,33 @@ const Products= () =>{
 
   const dispatch = useDispatch()
 
-  useEffect(  () => {
-    if(!isLoading){
-      dispatch(setProducts(products.products));
-    }
-  }, [isLoading])
+  // useEffect(  () => {
+  //   if(!isLoading){
+  //     dispatch(setProducts(products.products));
+  //   }
+  // }, [isLoading])
 
   const addNewProduct = () => {
-    const name="Ime"
+    const name="knjiga test"
     const description="opis" 
     const picture="slika" 
-    const price = 22
+    const price = 23
     const response = addProduct({name,description, picture, price})
   };
 
-  let content;
+  const uploadImage = async () => {
+    const formData = new FormData()
+    formData.append("file", image)
+    formData.append("upload_preset", "zbrgafkf")
+
+    const response = await axios.post('https://api.cloudinary.com/v1_1/dfms5eutq/image/upload',formData)
+    console.log(response.data.url)
+    setImageURL(response.data.url)
+  };
+
+
+
+  let content = <div></div>;
 
   if(isLoading){
     content = <p>Loading...</p>
@@ -53,7 +67,7 @@ const Products= () =>{
           <div className="col-2" style={{backgroundColor: "#0d6efd", height: 800}}>
             <button onClick={addNewProduct}> Add new</button>
           </div>
-          <div className="col-9">
+          <div className="col-8">
             <ProductList productsData={currentPosts} />
               <Pagination
                   totalPosts={products.products.length}
@@ -61,6 +75,10 @@ const Products= () =>{
                   setCurrentPage={setCurrentPage}
                   currentPage={currentPage}
               />
+          </div>
+          <div className="col-2" style={{backgroundColor: "#0d6efd", height: 800}}>
+            <input type="file" onChange={(e) => {setImage(e.target.files[0])}}></input>
+            <button onClick={uploadImage}> Add Product</button>
           </div>
         </div>
       </div>
@@ -90,7 +108,7 @@ const Products= () =>{
 
   return (
     <div>
-      {content}
+    {content}
     </div>
     
   )
