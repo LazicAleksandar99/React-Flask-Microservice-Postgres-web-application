@@ -11,7 +11,7 @@ const ProductList = ({ productsData }) => {
                     <ProductCard
                         key={index}
                         name={product.name}
-                        image={product.image}
+                        picture={product.picture}
                         description={product.description}
                         price={product.current_price}
                     />

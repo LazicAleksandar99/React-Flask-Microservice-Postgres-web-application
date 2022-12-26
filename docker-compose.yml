@@ -12,6 +12,7 @@ services:
       FLASK_DEBUG: true
       FLASK_ENV: development #lazy load u development modu zato je dobar
       DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres  #://user:password@db je ime 16 linija:5432/DB_name
+      CLOUDINARY_URL: cloudinary://319854841752268:HQa86nLhkmp2RIL9sLEaHp8GCEE@dfms5eutq
       SECRET_KEY: My_secret_key
     volumes:
       - ./backend:/app          #moj kod gdje se nalazi mapiram na workdir fodler flask

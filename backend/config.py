@@ -8,3 +8,4 @@ class Config(object):
     JWT_SECRET_KEY = os.environ.get("SECRET_KEY")
     JWT_ALGORITHM = "HS256"
     CORS_HEADERS = 'Content-Type'
+    CLOUDINARY_URL = os.environ.get("CLOUDINARY_API_URL")

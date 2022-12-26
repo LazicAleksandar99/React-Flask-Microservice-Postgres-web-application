@@ -8,6 +8,7 @@ import SignUp from './pages/Signup';
 import PrivateRoutes from './routes/PrivateRoutes';
 import Profile from './pages/Profile';
 import Unauthorized from './pages/Unauthorized';
+import AddProduct from './pages/AddProduct';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
             <Route path="/products" element={<Products /> }/>
             <Route path="/profile" element={<Profile /> }/>
           </Route>
+          <Route element={<PrivateRoutes allowedRoles={["creator","admin"]} />}>
+            <Route  path="/add/product" element={<AddProduct /> }/>
+          </Route >
           <Route path="/unauthorized" element={<Unauthorized /> }/>
           <Route path="/signin" element={<SignIn />} exact/>
           <Route path="/signup" element={<SignUp />} exact/>

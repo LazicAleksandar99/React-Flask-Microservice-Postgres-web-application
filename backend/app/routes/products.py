@@ -5,6 +5,9 @@ from flask_jwt_extended import jwt_required
 from app.models.product import Product, ProductSchema
 from app.models.user import User, UserSchema
 from flask_cors import cross_origin
+# import cloudinary
+
+# config = cloudinary.config(secure=True)
 
 bp_products = Blueprint('products', __name__, url_prefix='/product')
 
@@ -23,10 +26,14 @@ def add_product():
     picture = request.json['picture']
     price = request.json['price']
     #owner_id = request.json['owner_id']
+    # format = 'svg'
+    # result = cloudinary.uploader.upload(picture, format)
+
+    # print(result)
 
     user = User.query.filter_by(email=current_user).first()
     
-    new_product = Product(name, description, picture, price, user.account_id)
+    new_product = Product(name, description, picture, int(price), user.account_id)
 
     db.session.add(new_product)
     db.session.commit()

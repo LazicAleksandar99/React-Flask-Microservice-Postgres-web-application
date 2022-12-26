@@ -3,9 +3,9 @@ from config import Config
 from app.extensions import db, migrate
 from app.models.user import User #jako bitno da se klase importaju da migracije mogu biti prepoznate
 from app.models.product import Product
+from app.models.announcement import Announcement
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -23,5 +23,8 @@ def create_app(config_class=Config):
 
     from app.routes.products import bp_products
     app.register_blueprint(bp_products)
+
+    from app.routes.announcement import bp_announcements
+    app. register_blueprint(bp_announcements)
 
     return app
