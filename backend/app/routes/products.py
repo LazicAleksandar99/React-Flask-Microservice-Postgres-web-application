@@ -52,3 +52,15 @@ def get_all_products():
   #  print(products.length)
     all_products = products_schema.dump(products) # mora shema jer preko query.all ne moze jesinify
     return jsonify(products = all_products)
+
+@bp_products.route('/all/names', methods=['GET'])
+@cross_origin()
+@jwt_required()
+def get_all_products_name():
+   
+    current_user = get_jwt_identity()
+    #dalje s ovim treba provjera da li customer ili admin.... 
+    names = Product.query.with_entities(Product.name)
+    
+    all_names = products_schema.dump(names)
+    return jsonify(names = all_names)

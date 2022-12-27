@@ -25,11 +25,18 @@ const SignUp= () =>{
     nameRef.current.focus();
   }, [])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const registerCustomer = async() => {
+    submitRegistration("customer")
+  }
+
+  const registerCreator = async() => {
+    submitRegistration("creator")
+  }
+
+  const submitRegistration = async (type) => {
 
     try{
-      const response = await register({name, last_name, email, birthday, password})
+      const response = await register({name, last_name, email, birthday, password,type})
 
       if(response?.data[0]?.error){
         alert(response?.data[0]?.error)
@@ -65,7 +72,7 @@ const SignUp= () =>{
 
                       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                      <form onSubmit={handleSubmit} className="mx-1 mx-md-4">
+                      <form className="mx-1 mx-md-4">
 
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -146,7 +153,9 @@ const SignUp= () =>{
                         </div>
 
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                          <button type="submit" className="btn btn-primary btn-lg">Register</button>
+                          <button onClick={registerCustomer} className="btn btn-primary btn-lg">Register</button>
+                          <p>&nbsp;&nbsp;</p>
+                          <button onClick={registerCreator}  className="btn btn-primary btn-lg">Creator</button>
                         </div>
 
                         <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">

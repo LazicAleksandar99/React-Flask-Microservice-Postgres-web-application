@@ -1,17 +1,17 @@
 import React from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import SearchBar from './SearchBar';
 import { useDispatch } from 'react-redux';
 import { logOut } from '../context/authSlice';
+import {apiSlice} from '../app/api/apiSlice';
 
 const Navbar= () =>{
 
   const dispatch = useDispatch()
-  const navigate = useNavigate
 
   const handleClick = () => {
     dispatch(logOut())
-    navigate('/signin')
+    dispatch(apiSlice.util.resetApiState());
   }
   return (
       <div>

@@ -3,6 +3,8 @@ import ProductList from '../components/ProductList';
 import Pagination from '../components/Pagination';
 import { Link } from "react-router-dom";
 import { useGetAllProductsQuery } from '../context/product/productApiSlice';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../context/authSlice';
 
 const Products= () =>{
   //jedan if sa divom ako je prazno da napravi div bijeli visine 800 i tekstom u sredini
@@ -12,7 +14,9 @@ const Products= () =>{
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
 
+  const token = useSelector(selectCurrentToken)  
   let content  
+  const role = JSON.parse(atob(token.split('.')[1])).role
   
   const {
     data: products,
@@ -32,7 +36,7 @@ const Products= () =>{
       <div className="container text-center" style={{paddingTop: "4%", paddingBottom: "2%"}}>       
         <div className=" row" style={{paddingTop: "1rem"}}>
           <div className="col-2" style={{backgroundColor: "#0d6efd", height: 800}}>
-            <button> <Link to="/add/product" className="link-primary">Add new product</Link></button>
+            {role == "creator" ? <button> <Link to="/new/product" className  ="link-primary">Add new product</Link></button> : <div></div>}
           </div>
           <div className="col-9">
             <ProductList productsData={currentPosts} />

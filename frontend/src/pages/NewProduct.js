@@ -2,9 +2,9 @@ import React, {useState, useRef, useEffect} from 'react';
 import axios from '../api/axios'
 import {useAddProductMutation } from '../context/product/productApiSlice';
 
-import '../assets/styles/AddProduct.css'
+import '../assets/styles/NewProduct.css'
 
-const AddProduct = () =>{
+const NewProduct = () =>{
 
     const nameRef = useRef();
     const [name, setName] = useState('');
@@ -31,9 +31,9 @@ const AddProduct = () =>{
 
         const response = await axios.post('https://api.cloudinary.com/v1_1/dfms5eutq/image/upload',formData)
        // setImageURL(response.data.url)
-        // console.log(response)
-        // const add_response = await addProduct({name,description, picture: response.data.url, price})
-        // console.log(add_response)
+        console.log(response)
+        const add_response = await addProduct({name,description, picture: response.data.url, price})
+        console.log(add_response)
         //try catch ifovi....
       }
     
@@ -99,4 +99,4 @@ const AddProduct = () =>{
     );
 }
 
-export default AddProduct;
+export default NewProduct;

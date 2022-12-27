@@ -39,13 +39,18 @@ def sign_up():
     email = request.json['email']
     password = request.json['password']
     birthday = request.json['birthday']
+    type = request.json['type'] # if da ne smije biti admin
     #neke provjere  
     old_user = User.query.filter_by(email=email).first()
 
     if old_user:
         return jsonify({"error": "User email already exists"}, 400)
 
-    new_user = User(name, last_name, birthday, email, "customer", password, "customer")
+    verified = "customer"
+    if type == "creator":
+        verified = "pending"
+
+    new_user = User(name, last_name, birthday, email, type, password, verified)
 
     db.session.add(new_user)
     db.session.commit()

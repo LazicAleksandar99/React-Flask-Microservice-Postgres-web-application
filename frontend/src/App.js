@@ -8,7 +8,9 @@ import SignUp from './pages/Signup';
 import PrivateRoutes from './routes/PrivateRoutes';
 import Profile from './pages/Profile';
 import Unauthorized from './pages/Unauthorized';
-import AddProduct from './pages/AddProduct';
+import NewProduct from './pages/NewProduct';
+import NewAnnouncement from './pages/NewAnnouncement';
+import Users from './pages/Users';
 
 function App() {
   return (
@@ -20,8 +22,12 @@ function App() {
             <Route path="/products" element={<Products /> }/>
             <Route path="/profile" element={<Profile /> }/>
           </Route>
-          <Route element={<PrivateRoutes allowedRoles={["creator","admin"]} />}>
-            <Route  path="/add/product" element={<AddProduct /> }/>
+          <Route element={<PrivateRoutes allowedRoles={["creator"]} />}>
+            <Route  path="/new/product" element={<NewProduct /> }/>
+            <Route  path="/new/announcement" element={<NewAnnouncement /> }/>
+          </Route >  
+          <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
+            <Route  path="/users" element={<Users /> }/>
           </Route >
           <Route path="/unauthorized" element={<Unauthorized /> }/>
           <Route path="/signin" element={<SignIn />} exact/>

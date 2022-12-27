@@ -25,6 +25,9 @@ def create_app(config_class=Config):
     app.register_blueprint(bp_products)
 
     from app.routes.announcement import bp_announcements
-    app. register_blueprint(bp_announcements)
+    app.register_blueprint(bp_announcements)
+
+    from app.routes.user import bp_user
+    app.register_blueprint(bp_user)
 
     return app

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
-import AnnouncementCard from '../components/AnnouncementCard';
+import { useNavigate } from "react-router-dom";
 import { useGetAllAnnouncementsQuery } from '../context/announcement/announcementApiSlice';
 import AnnouncementList from '../components/AnnouncementList';
 import Pagination from '../components/Pagination';
-import "../assets/styles/Home.css"
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../context/authSlice';
 
+import "../assets/styles/Home.css"
 const Home= () =>{
 
   //const [left,setLeft] = useState(true)
@@ -13,8 +14,11 @@ const Home= () =>{
   const [postsPerPage, setPostsPerPage] = useState(8);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
-  
+
+  const token = useSelector(selectCurrentToken)  
+  const navigate = useNavigate()
   let content  
+  const role = JSON.parse(atob(token.split('.')[1])).role
   
   const {
     data: announcements,
@@ -23,6 +27,10 @@ const Home= () =>{
     isError,
     error 
   } = useGetAllAnnouncementsQuery(undefined, {refetchOnMountOrArgChange: true});
+
+  const forwardToNewAnnouncement = () => {
+    navigate('/new/announcement')
+  }
 
   if(isLoading){
     content = <div><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br></div> 
@@ -92,6 +100,8 @@ const Home= () =>{
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}
             />
+            { role == "creator" ? <button onClick={forwardToNewAnnouncement}>New Announcement</button> : <div></div>}
+
         </div>
       </div>
 

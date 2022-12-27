@@ -29,11 +29,11 @@ class User(db.Model):
 
 
 class UserSchema(Schema):
-    account_id = fields.Number()
+    #account_id = fields.Number()
     name = fields.Str()
     last_name = fields.Str()
     email = fields.Str()
     birthday = fields.DateTime()
-    password = fields.Str()
+    #password = fields.Str()
     role = fields.Str()
     verified = fields.Str()
