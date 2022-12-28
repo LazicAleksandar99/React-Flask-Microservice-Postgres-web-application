@@ -1,17 +1,37 @@
 import React from "react";
+import { useDeleteProductMutation } from '../context/product/productApiSlice';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '../context/authSlice';
 
 import "../assets/styles/ProductCard.css";
 
-const ProductCard = ({ name, description, picture, price }) => {
+const ProductCard = ({ name, description, picture, price, id }) => {
+    
+    const token = useSelector(selectCurrentToken) 
+    const role = JSON.parse(atob(token.split('.')[1])).role
+    const [deleteProduct] = useDeleteProductMutation()
+
+    const deleteProductById = async() => {
+        try{
+            const response = await deleteProduct(id)
+        }catch(error){
+            console.log(error)
+        }
+      }
+
+
     return (
-        <div className='card'>
-            <div className='card_image'>
-                <img src={picture} alt={name} />
+        <div>
+            <div className='card'>
+                <div className='card_image'>
+                    <img src={picture} alt={name} />
+                </div>
+                <div className='card_info'>
+                    <h2>{name}</h2>
+                    <h3>${price}</h3>
+                </div>
             </div>
-            <div className='card_info'>
-                <h2>{name}</h2>
-                <h3>${price}</h3>
-            </div>
+            {role == "creator" ? <button type="button" onClick={deleteProductById} className="btn btn-danger">Delete</button> : <div></div>}
         </div>
     );
 };

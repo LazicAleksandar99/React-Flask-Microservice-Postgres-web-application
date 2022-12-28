@@ -44,3 +44,19 @@ def get_all_announcements():
   #  print(products.length)
     all_announcements = announcements_schema.dump(announcements) # mora shema jer preko query.all ne moze jesinify
     return jsonify(announcements = all_announcements)
+
+
+@bp_announcements.route('/delete/<id>', methods=['DELETE'])
+@cross_origin()
+@jwt_required()
+def delete_announcement(id):
+
+    current_user = get_jwt_identity()
+    #dalje s ovim treba provjera da li customer ili admin.... 
+    #Announcement.query.filter_by(announcement_id=id).delete()
+
+    announcement = Announcement.query.get(id)
+    db.session.delete(announcement)
+    db.session.commit()
+
+    return jsonify({"deleted" : "Announcement succesfuly deleted"})

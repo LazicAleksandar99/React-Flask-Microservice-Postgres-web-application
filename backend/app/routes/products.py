@@ -2,6 +2,7 @@ from app.extensions import db
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from app.models.announcement import Announcement
 from app.models.product import Product, ProductSchema
 from app.models.user import User, UserSchema
 from flask_cors import cross_origin
@@ -34,7 +35,6 @@ def add_product():
     user = User.query.filter_by(email=current_user).first()
     
     new_product = Product(name, description, picture, int(price), user.account_id)
-
     db.session.add(new_product)
     db.session.commit()
 
@@ -53,6 +53,7 @@ def get_all_products():
     all_products = products_schema.dump(products) # mora shema jer preko query.all ne moze jesinify
     return jsonify(products = all_products)
 
+
 @bp_products.route('/all/names', methods=['GET'])
 @cross_origin()
 @jwt_required()
@@ -64,3 +65,18 @@ def get_all_products_name():
     
     all_names = products_schema.dump(names)
     return jsonify(names = all_names)
+
+
+
+@bp_products.route('/delete/<id>', methods=['DELETE'])
+@cross_origin()
+@jwt_required()
+def delete_product(id):
+
+    current_user = get_jwt_identity()
+    #dalje s ovim treba provjera da li customer ili admin.... 
+    Announcement.query.filter_by(product_id=id).delete()
+    Product.query.filter_by(product_id=id).delete()
+    db.session.commit()
+
+    return jsonify({"deleted" : "Product succesfuly deleted"})

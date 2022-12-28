@@ -6,6 +6,7 @@ class Announcement(db.Model):
     heading = db.Column(db.String(40), nullable=False)
     description = db.Column(db.String(700), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.product_id'), nullable=False)
+    #product = db.relationship( 'Product', backref='announcement')
     picture = db.Column(db.String(256), nullable=False)
 
     def __init__(self, heading, description, product_id, picture):

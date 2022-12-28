@@ -8,6 +8,7 @@ class Product(db.Model):
     picture = db.Column(db.String(256), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.account_id'), nullable=False)
+    #user = db.relationship( 'User', backref='product')
     announcements = db.relationship('Announcement', backref='product', cascade = 'all, delete-orphan')
 
     def __init__(self, name, description, picture, price, owner):

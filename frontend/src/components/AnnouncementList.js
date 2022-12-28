@@ -13,6 +13,7 @@ const AnnouncementList = ({ announcementsData }) => {
                         heading={announcement.heading}
                         description={announcement.description}
                         picture={announcement.picture}
+                        id = {announcement.announcement_id}
                         left = {index % 2 == 0}
                     />
                 );

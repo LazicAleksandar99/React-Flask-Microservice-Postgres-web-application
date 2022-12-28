@@ -14,6 +14,7 @@ const ProductList = ({ productsData }) => {
                         picture={product.picture}
                         description={product.description}
                         price={product.current_price}
+                        id = {product.product_id}
                     />
                 );
             })}
