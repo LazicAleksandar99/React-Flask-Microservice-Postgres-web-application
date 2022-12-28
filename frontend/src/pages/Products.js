@@ -13,7 +13,7 @@ const Products= () =>{
   const [postsPerPage, setPostsPerPage] = useState(4);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
-
+  
   const token = useSelector(selectCurrentToken)  
   let content  
   const role = JSON.parse(atob(token.split('.')[1])).role

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useGetAllUsersQuery } from '../context/user/userApiSlice';
+import { useGetAllUsersQuery } from '../context/user/usersApiSlice';
 import Pagination from "../components/Pagination";
 import UserList from '../components/UserList';
 

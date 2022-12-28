@@ -6,7 +6,16 @@ const userSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             const { user } = action.payload
-            state.user = user
+            state.user = user[0]
+        },
+        changeUser: (state, action) => {
+            console.log('change user')
+            console.log(state)
+            console.log(action.payload)
+            state.user.name = action.payload.name
+            state.user.last_name = action.payload.last_name
+            state.user.email = action.payload.email
+            //state.user.birthday = action.payload.birthday
         },
         clearUser: (state, action) => {
             state.user = null
@@ -14,9 +23,8 @@ const userSlice = createSlice({
     },
 })
 
-export const { setUser, clearUser } = userSlice.actions
+export const { setUser, changeUser, clearUser } = userSlice.actions
 
 export default userSlice.reducer
 
 export const selectCurrentUser = (state) => state.user.user
-//export const selectCurrentProducts = (state) => state.auth.products

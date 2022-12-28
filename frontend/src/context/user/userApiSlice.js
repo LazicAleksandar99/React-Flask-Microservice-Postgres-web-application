@@ -1,24 +1,17 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
-export const usersApiSlice = apiSlice.injectEndpoints({
-    tagTypes: ['Users'],
+export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getAllUsers: builder.query({
-            query: () => '/user/all',
-            providesTags: ['Users']
-        }),
-        changeUserVerificationStatus: builder.mutation({
+        changeUserProfile: builder.mutation({
             query: fields => ({
-                url: '/user/update',
+                url: '/user/change',
                 method: 'PUT',
                 body: {...fields}
-            }),
-            invalidatesTags: ['Users']
+            })
         }),
     })
 })
 
 export const {
-    useGetAllUsersQuery,
-    useChangeUserVerificationStatusMutation
-} = usersApiSlice
+    useChangeUserProfileMutation
+} = userApiSlice

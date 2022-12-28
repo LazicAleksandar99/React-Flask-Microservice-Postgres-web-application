@@ -41,3 +41,34 @@ def update_user():
 
     db.session.commit()
     return jsonify({"Verified": "New user succesfuly verified"}, 201)
+
+
+@bp_user.route('/change', methods=['PUT'])
+@cross_origin()
+@jwt_required()
+def change_user_profile():
+
+    current_user = get_jwt_identity()
+
+    name = request.json['name']
+    last_name = request.json['last_name']
+    email = request.json['email']
+    password = request.json['password']
+    birthday = request.json['birthday']
+
+    user = User.query.filter_by(email=current_user).first()
+
+    #ovdje sad ifovi, da li ime nesto ima u sebi, prezime isto, email da li vec postoji da li je validan email, password da li se vec podudara b day da li veci manji i 18+ godina
+
+    user.name = name
+    user.last_name = last_name
+    user.email = email
+    user.password = User.generete_password(password)
+    user.birthday = birthday
+
+    db.session.commit()
+
+    additional_claims = {"role": user.role}
+    token = create_access_token(identity=email,additional_claims = additional_claims)
+    #the_user = user_schema.dump(user) # mora shema jer preko query.all ne moze jesinify
+    return jsonify({'token': token}, 200)

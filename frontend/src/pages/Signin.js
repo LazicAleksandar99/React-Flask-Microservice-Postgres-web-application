@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import '../assets/styles/Signin.css';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../context/authSlice';
+import { setUser } from '../context/user/userSlice';
 import { useLoginMutation } from '../context/authApiSlice';
 
 const SignIn= () =>{
@@ -13,6 +14,7 @@ const SignIn= () =>{
   const navigate = useNavigate()
 
   const [login, { isLoading }] = useLoginMutation()
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -30,6 +32,8 @@ const SignIn= () =>{
       }
       else if(response?.data[0]?.token){
         dispatch(setCredentials({...response?.data[0]}))
+        dispatch(setUser({...response?.data[0]}))
+        console.log(response?.data[0]?.user[0])
         setEmail('')
         setPassword('')
         navigate('/home')

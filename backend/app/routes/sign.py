@@ -20,11 +20,16 @@ def sign_in():
     #mozda provjera email i password
     #  
     user = User.query.filter_by(email=email).first()
+    users = User.query.all()
+
+    the_user = users_schema.dump(
+            filter(lambda t: t.email == email, users)
+        )
     
     if user and user.verify_password(password):
         additional_claims = {"role": user.role}
         token = create_access_token(identity=email,additional_claims = additional_claims)
-        response = jsonify({'token': token}, 200)
+        response = jsonify({'token': token, 'user': the_user}, 200)
         return response
     else:
         response = jsonify({"error": "Bad username or password"}, 401)

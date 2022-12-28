@@ -1,5 +1,5 @@
 import React from 'react';
-import { useChangeUserVerificationStatusMutation } from '../context/user/userApiSlice';
+import { useChangeUserVerificationStatusMutation } from '../context/user/usersApiSlice';
 
 const UserCard= ({ birthday, email, name, last_name, role, status}) =>{
 
