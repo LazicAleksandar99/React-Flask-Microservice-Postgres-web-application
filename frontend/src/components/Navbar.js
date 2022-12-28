@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { logOut } from '../context/authSlice';
 import { clearUser } from '../context/user/userSlice';
 import { apiSlice } from '../app/api/apiSlice';
+import { clearProducts } from '../context/product/productSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../context/authSlice';
 
@@ -18,6 +19,7 @@ const Navbar= () =>{
     const handleClick = () => {
         dispatch(logOut())
         dispatch(clearUser())
+        dispatch(clearProducts())
         dispatch(apiSlice.util.resetApiState());
     }
     return (

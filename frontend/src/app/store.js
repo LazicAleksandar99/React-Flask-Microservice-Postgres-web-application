@@ -10,6 +10,7 @@ import { persistReducer, persistStore,
     PERSIST,
     PURGE,
     REGISTER  } from 'redux-persist';
+import productSlice from "../context/product/productSlice";
 
 
 const persistConfig = {
@@ -20,6 +21,7 @@ const persistConfig = {
 const presistedCombiend = combineReducers({
         auth: authReducer,
         user: userReducer,
+        products: productSlice,
         [apiSlice.reducerPath]: apiSlice.reducer})
 
 const presistedReducer = persistReducer(persistConfig, presistedCombiend)

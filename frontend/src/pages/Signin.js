@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setCredentials } from '../context/authSlice';
 import { setUser } from '../context/user/userSlice';
 import { useLoginMutation } from '../context/authApiSlice';
+import { setProducts } from '../context/product/productSlice';
 
 const SignIn= () =>{
 
@@ -33,6 +34,7 @@ const SignIn= () =>{
       else if(response?.data[0]?.token){
         dispatch(setCredentials({...response?.data[0]}))
         dispatch(setUser({...response?.data[0]}))
+        dispatch(setProducts({...response?.data[0]}))
         console.log(response?.data[0]?.user[0])
         setEmail('')
         setPassword('')

@@ -4,12 +4,14 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from app.models.user import User, UserSchema
+from app.models.product import Product, ProductSchema
 from flask_cors import cross_origin
 
 bp_sign = Blueprint('sign', __name__, url_prefix='/sign')
 
 user_schema = UserSchema
 users_schema = UserSchema(many=True)
+products_schema = ProductSchema(many=True)
 
 @bp_sign.route('/in', methods=['POST'])
 @cross_origin()
@@ -21,15 +23,18 @@ def sign_in():
     #  
     user = User.query.filter_by(email=email).first()
     users = User.query.all()
+    products = Product.query.all()
 
     the_user = users_schema.dump(
             filter(lambda t: t.email == email, users)
         )
+
+    the_products = products_schema.dump(products)
     
     if user and user.verify_password(password):
         additional_claims = {"role": user.role}
         token = create_access_token(identity=email,additional_claims = additional_claims)
-        response = jsonify({'token': token, 'user': the_user}, 200)
+        response = jsonify({'token': token, 'user': the_user, 'products': the_products}, 200)
         return response
     else:
         response = jsonify({"error": "Bad username or password"}, 401)
