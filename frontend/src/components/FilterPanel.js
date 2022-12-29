@@ -3,10 +3,7 @@ import SearchBar from './SearchBar';
 import PriceSlider from './PriceSlider';
 import '../assets/styles/FilterPanel.css'
 
-const FilterPanel= ({
-    selectedPrice,
-    changePrice,
-  }) =>{
+const FilterPanel= ({selectedPrice,changePrice,}) =>{
 
   return (
     <div className='panel'>

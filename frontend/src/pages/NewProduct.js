@@ -1,6 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
 import axios from '../api/axios'
 import {useAddProductMutation } from '../context/product/productApiSlice';
+import { useDispatch } from 'react-redux';
+import { addNewProduct, setProducts } from '../context/product/productSlice';
 
 import '../assets/styles/NewProduct.css'
 
@@ -14,6 +16,7 @@ const NewProduct = () =>{
     const [imageURL, setImageURL] = useState('');
 
     const [addProduct] = useAddProductMutation();
+    const dispatch = useDispatch()
 
     useEffect(() => {
         nameRef.current.focus();
@@ -31,9 +34,8 @@ const NewProduct = () =>{
 
         const response = await axios.post('https://api.cloudinary.com/v1_1/dfms5eutq/image/upload',formData)
        // setImageURL(response.data.url)
-        console.log(response)
         const add_response = await addProduct({name,description, picture: response.data.url, price})
-        console.log(add_response)
+        dispatch(setProducts({...add_response?.data[0]}))
         //try catch ifovi....
       }
     

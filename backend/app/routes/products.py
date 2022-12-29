@@ -38,7 +38,10 @@ def add_product():
     db.session.add(new_product)
     db.session.commit()
 
-    return jsonify({"created": "New product succesfuly created"}, 201)
+    products = Product.query.all()
+    the_products = products_schema.dump(products)
+
+    return jsonify({"created": "New product succesfuly created", "products": the_products}, 201)
 
 
 @bp_products.route('/all', methods=['GET'])
@@ -79,4 +82,7 @@ def delete_product(id):
     Product.query.filter_by(product_id=id).delete()
     db.session.commit()
 
-    return jsonify({"deleted" : "Product succesfuly deleted"})
+    products = Product.query.all()
+    the_products = products_schema.dump(products)
+
+    return jsonify({"deleted" : "Product succesfuly deleted", "products": the_products}, 201)
