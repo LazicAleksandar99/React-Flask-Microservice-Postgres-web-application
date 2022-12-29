@@ -34,11 +34,15 @@ const NewAnnouncement= () =>{
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
+        try{
+          const response = await addAnnouncement({heading, description, name})
+          console.log(response)
+        }catch(error){
+
+        }
         // //provjere
         //  if(name = '')
         //     setName(products.products[0].name)
-         const response = await addAnnouncement({heading, description, name})
-         console.log(response)
         // console.log(add_response)
         //try catch ifovi....
     }

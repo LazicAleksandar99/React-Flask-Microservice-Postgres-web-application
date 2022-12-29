@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import PriceSlider from './PriceSlider';
 import '../assets/styles/FilterPanel.css'
 
-const FilterPanel= ({selectedPrice,changePrice,}) =>{
+const FilterPanel= ({selectedPrice,changePrice, value, changeInput}) =>{
 
   return (
     <div className='panel'>
@@ -13,7 +13,7 @@ const FilterPanel= ({selectedPrice,changePrice,}) =>{
         </div>
         <div className='input-group' style={{marginTop: "3rem"}}>
             <p className='label-range'>Search</p>
-            <SearchBar/>
+            <SearchBar value={value} changeInput={changeInput}/>
         </div>
     </div>
   );

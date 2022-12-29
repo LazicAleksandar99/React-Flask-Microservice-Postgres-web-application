@@ -16,6 +16,7 @@ const Products= () =>{
  // const [selectedPrice, setSelectedPrice] = useState([1000, 5000]);
   const [productsData, setProductsData] = useState(useSelector(selectCurrentProducts))
   const [productsFullData, setProductsFullData] =  useState(useSelector(selectCurrentProducts))
+  const [searchInput, setSearchInput] = useState('');
   const [selectedPrice, setSelectedPrice] = useState([1, 10000]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(4);
@@ -49,7 +50,6 @@ const Products= () =>{
         dispatch(setProducts({...response?.data[0]}))
         setProductsData(response?.data[0].products)
         setProductsFullData(response?.data[0].products)
-        applyFilters()
     }catch(error){
         console.log(error)
     }
@@ -61,6 +61,15 @@ const Products= () =>{
     const minPrice = selectedPrice[0];
     const maxPrice = selectedPrice[1];
 
+    if (searchInput) {
+      updatedList = updatedList.filter(
+        (item) =>
+          item.name.toLowerCase().search(searchInput.toLowerCase().trim()) !==
+          -1
+      );
+    }
+    console.log(searchInput)
+    console.log(updatedList)
     updatedList = updatedList.filter(
       (item) => item.price >= minPrice && item.price <= maxPrice
     );
@@ -70,9 +79,8 @@ const Products= () =>{
 
   useEffect( () => {
     applyFilters()
-  },[selectedPrice])
+  },[selectedPrice,searchInput,productsFullData])
 
-  console.log('hoce li ovo biti poslje delete')
   const currentPosts = productsData.slice(firstPostIndex, lastPostIndex);
   content = 
   <div className="container text-center" style={{paddingTop: "4%", paddingBottom: "2%"}}>       
@@ -82,6 +90,8 @@ const Products= () =>{
       
           <div className='home_panel-wrap'>
             <FilterPanel
+              value={searchInput}
+              changeInput={(e) => setSearchInput(e.target.value)}
               selectedPrice={selectedPrice}
               changePrice={handleChangePrice}
             />
