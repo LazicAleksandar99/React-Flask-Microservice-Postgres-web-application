@@ -21,25 +21,36 @@ products_schema = ProductSchema(many=True)
 def add_product():
 
     current_user = get_jwt_identity()
-    #provjera da li je ROLE ADMIN
+    
+    user = User.query.filter_by(email=current_user).first()
+    if user and user.role != "creator":
+         return jsonify({"error": "You are not allowed to perform this acction"}, 401)
+
     name = request.json['name']
     description = request.json['description']
     picture = request.json['picture']
     price = request.json['price']
-    #owner_id = request.json['owner_id']
-    # format = 'svg'
-    # result = cloudinary.uploader.upload(picture, format)
 
-    # print(result)
-
-    user = User.query.filter_by(email=current_user).first()
+    
+    if name or name.strip():
+        return jsonify({"error": "You didnt input valid name "},401)
+    elif description or description.strip():
+        return jsonify({"error": "You didnt input valid description"},401)
+    elif picture or picture.strip():
+        return jsonify({"error": "You didnt input valid picture"},401)
+    elif price.isnumeric():
+        return jsonify({"error": "You didnt input valid price"},401)
+    elif 0 > int(price) or int(price) > 10000:
+        return jsonify({"error": "You didnt input valid price(min 1 max 10000"},401)
     
     new_product = Product(name, description, picture, int(price), user.account_id)
     db.session.add(new_product)
     db.session.commit()
 
     products = Product.query.all()
-    the_products = products_schema.dump(products)
+    the_products = products_schema.dump(
+            filter(lambda t: t.owner_id == user.account_id, products)
+            )
 
     return jsonify({"created": "New product succesfuly created", "products": the_products}, 201)
 
@@ -50,10 +61,20 @@ def add_product():
 def get_all_products():
 
     current_user = get_jwt_identity()
-    #dalje s ovim treba provjera da li customer ili admin.... 
+
+    user = User.query.filter_by(email = current_user).first()
     products = Product.query.all()
-  #  print(products.length)
-    all_products = products_schema.dump(products) # mora shema jer preko query.all ne moze jesinify
+    
+    if not user:
+            return jsonify({"error": "Not valid token"}, 401)
+
+    if user.role == "creator":
+        all_products = products_schema.dump(
+            filter(lambda t: t.owner_id == user.account_id, products)
+            )
+    else:
+        all_products = products_schema.dump(products)
+
     return jsonify(products = all_products)
 
 

@@ -39,7 +39,7 @@ def add_product():
     if product:
         return jsonify({"error": "Name dosen't match any product"},401)
 
-    new_announcement = Announcement(heading, description, product.product_id, product.picture)
+    new_announcement = Announcement(heading, description, product.product_id, user.account_id, product.picture)
 
     db.session.add(new_announcement)
     db.session.commit()
@@ -53,10 +53,19 @@ def add_product():
 def get_all_announcements():
 
     current_user = get_jwt_identity()
-    #dalje s ovim treba provjera da li customer ili admin.... 
+    user = User.query.filter_by(email = current_user).first()
     announcements = Announcement.query.all()
-  #  print(products.length)
-    all_announcements = announcements_schema.dump(announcements) # mora shema jer preko query.all ne moze jesinify
+ 
+    if not user:
+        return jsonify({"error": "Not valid token"}, 401)
+
+    if user.role == "creator":
+        all_announcements = announcements_schema.dump(
+            filter(lambda t: t.owner_id == user.account_id, announcements)
+            ) 
+    else:
+        all_announcements = announcements_schema.dump(announcements)
+    
     return jsonify(announcements = all_announcements)
 
 
@@ -68,9 +77,12 @@ def delete_announcement(id):
     current_user = get_jwt_identity()
 
     user = User.query.filter_by(email=current_user).first()
+    if user:
+        return jsonify({"error": "User not existing"}, 401)
+
     if user.role != "creator":
          return jsonify({"error": "You are not allowed to perform this acction"}, 401)
-         
+
     #treba vidjet da li je ovaj user tata za ovaj announcement
     announcement = Announcement.query.get(id)
     db.session.delete(announcement)

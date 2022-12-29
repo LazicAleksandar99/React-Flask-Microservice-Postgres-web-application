@@ -32,6 +32,7 @@ const SignIn= () =>{
         alert(response?.data?.error)
       }
       else if(response?.data[0]?.token){
+        console.log(response)
         dispatch(setCredentials({...response?.data[0]}))
         dispatch(setUser({...response?.data[0]}))
         dispatch(setProducts({...response?.data[0]}))
