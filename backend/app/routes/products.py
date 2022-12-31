@@ -23,7 +23,8 @@ def add_product():
     current_user = get_jwt_identity()
     
     user = User.query.filter_by(email=current_user).first()
-    if user and user.role != "creator":
+
+    if user.role != "creator":
          return jsonify({"error": "You are not allowed to perform this acction"}, 401)
 
     name = request.json['name']
@@ -32,13 +33,13 @@ def add_product():
     price = request.json['price']
 
     
-    if name or name.strip():
+    if not name or not name.strip() or len(name) < 1:
         return jsonify({"error": "You didnt input valid name "},401)
-    elif description or description.strip():
+    elif not description or not description.strip() or len(description) < 1:
         return jsonify({"error": "You didnt input valid description"},401)
-    elif picture or picture.strip():
+    elif not picture or not picture.strip() or len(picture) < 1:
         return jsonify({"error": "You didnt input valid picture"},401)
-    elif price.isnumeric():
+    elif not price.isnumeric():
         return jsonify({"error": "You didnt input valid price"},401)
     elif 0 > int(price) or int(price) > 10000:
         return jsonify({"error": "You didnt input valid price(min 1 max 10000"},401)
@@ -64,9 +65,6 @@ def get_all_products():
 
     user = User.query.filter_by(email = current_user).first()
     products = Product.query.all()
-    
-    if not user:
-            return jsonify({"error": "Not valid token"}, 401)
 
     if user.role == "creator":
         all_products = products_schema.dump(
@@ -84,10 +82,17 @@ def get_all_products():
 def get_all_products_name():
    
     current_user = get_jwt_identity()
-    #dalje s ovim treba provjera da li customer ili admin.... 
-    names = Product.query.with_entities(Product.name)
     
-    all_names = products_schema.dump(names)
+    user = User.query.filter_by(email=current_user).first()
+    if user.role != "creator":
+         return jsonify({"error": "You are not allowed to perform this acction"}, 401)
+
+    names = Product.query.all()
+    
+    all_names = products_schema.dump(
+            filter(lambda t: t.product_id == user.account_id, names)
+            )
+            
     return jsonify(names = all_names)
 
 
@@ -97,13 +102,31 @@ def get_all_products_name():
 @jwt_required()
 def delete_product(id):
 
-    current_user = get_jwt_identity()
-    #dalje s ovim treba provjera da li customer ili admin.... 
+    current_user = get_jwt_identity() 
+    user = User.query.filter_by(email=current_user).first()
+
+    if user.role != "creator":
+         return jsonify({"error": "You are not allowed to perform this acction"}, 401)
+
+    # Ovdje moram jos dodati da prvo uzmem sve announcmente pa onda idem redom i za onaj koji ima product_id= id i owner_id = user.account_id..
+    # announcement = Announcement.query.get(id)
+
+    # if user.account_id != announcement.owner_id:
+    #      return jsonify({"error": "You are not authorized to delete this announcement"},401)
+
+    # product = Product.query.get(id)
+
+    # if user.account_id != product.owner_id:
+    #      return jsonify({"error": "You are not authorized to delete this product"},401)    
+    #   db.session.delete(product)
+    #db.session.delete(announcement)
     Announcement.query.filter_by(product_id=id).delete()
     Product.query.filter_by(product_id=id).delete()
     db.session.commit()
 
     products = Product.query.all()
-    the_products = products_schema.dump(products)
+    the_products = products_schema.dump(
+            filter(lambda t: t.owner_id == user.account_id, products)
+            )
 
     return jsonify({"deleted" : "Product succesfuly deleted", "products": the_products}, 201)

@@ -19,9 +19,20 @@ def sign_in():
 
     email = request.json['email']
     password = request.json['password']
-    #mozda provjera email i password
-    #  
+
+    if not password or not password.strip() or len(password) < 1:
+        return jsonify({"error": "You didnt input valid password"},401)
+    elif not email or not email.strip() or len(email) < 3:
+        return jsonify({"error": "You didnt input valid email"},401)
+
     user = User.query.filter_by(email=email).first()
+
+    if user.verified == "pending":
+        return jsonify({"error": "You are still in process of verification. Please be patiant"},401)
+
+    if user.verified == "denied":
+        return jsonify({"error": "You have been denied access to this site!"},401)
+
     users = User.query.all()
     products = Product.query.all()
 
@@ -29,7 +40,12 @@ def sign_in():
             filter(lambda t: t.email == email, users)
         )
 
-    the_products = products_schema.dump(products)
+    if user.role == "creator":
+        the_products = products_schema.dump(
+            filter(lambda t: t.owner_id == user.account_id, products)
+            )
+    else:
+        the_products = products_schema.dump(products)
     
     if user and user.verify_password(password):
         additional_claims = {"role": user.role}
@@ -50,7 +66,20 @@ def sign_up():
     password = request.json['password']
     birthday = request.json['birthday']
     type = request.json['type'] # if da ne smije biti admin
-    #neke provjere  
+    
+    if not name or not name.strip() or len(name) < 1:
+        return jsonify({"error": "You didnt input valid name "},401)
+    elif not last_name or not last_name.strip() or len(last_name) < 1:
+        return jsonify({"error": "You didnt input valid last_name"},401)
+    elif not email or not email.strip() or len(email) < 1:
+        return jsonify({"error": "You didnt input valid email"},401)
+    elif not birthday :
+        return jsonify({"error": "You didnt input valid birthday"},401)
+    elif not type or type == "admin":
+        return jsonify({"error": "You will be baned if you try to manipulate with request fileds"},401)
+    elif type != "creator" and type != "customer":
+        return jsonify({"error": "You will be baned if you try to manipulate with request fileds"},401)
+
     old_user = User.query.filter_by(email=email).first()
 
     if old_user:

@@ -35,6 +35,7 @@ const Home= () =>{
   if(isLoading){
     content = <div><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br></div> 
   }else if(isSuccess){
+    console.log("announcements:")
     console.log(announcements)
       const currentPosts = announcements.announcements.slice(firstPostIndex, lastPostIndex);
       content = 

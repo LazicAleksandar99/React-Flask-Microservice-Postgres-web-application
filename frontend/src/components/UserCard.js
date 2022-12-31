@@ -10,7 +10,7 @@ const UserCard= ({ birthday, email, name, last_name, role, status}) =>{
   const verifyUser = async() => {
     sendStatusForVerification("verified")
   }
-
+  
   const denyUser = async() => {
     sendStatusForVerification("denied")
   }

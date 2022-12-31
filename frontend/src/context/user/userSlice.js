@@ -7,6 +7,8 @@ const userSlice = createSlice({
         setUser: (state, action) => {
             const { user } = action.payload
             state.user = user[0]
+            console.log('setovanje usera: ')
+            console.log(user[0])
         },
         changeUser: (state, action) => {
             console.log('change user')
@@ -15,7 +17,7 @@ const userSlice = createSlice({
             state.user.name = action.payload.name
             state.user.last_name = action.payload.last_name
             state.user.email = action.payload.email
-            //state.user.birthday = action.payload.birthday
+            state.user.birthday = action.payload.birthday
         },
         clearUser: (state, action) => {
             state.user = null

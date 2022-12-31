@@ -16,15 +16,16 @@ users_schema = UserSchema(many=True)
 @jwt_required()
 def get_users():
 
-    current_user = get_jwt_identity()
-    #dalje s ovim treba provjera da li customer ili admin.... 
-    users = User.query.all()
+    current_user = get_jwt_identity()    
+    user = User.query.filter_by(email=current_user).first()
 
+    if user.role != "admin":
+         return jsonify({"error": "You are not allowed to perform this acction"}, 401)
+    
+    users = User.query.all()    
     the_users = users_schema.dump(
             filter(lambda t: t.role != "admin", users)
         )
-  #  print(products.length)
-    all_users = users_schema.dump(users) # mora shema jer preko query.all ne moze jesinify
     return jsonify(users = the_users)
 
 
@@ -33,9 +34,26 @@ def get_users():
 @jwt_required()
 def update_user():
     
+    current_user = get_jwt_identity()    
+    user = User.query.filter_by(email=current_user).first()
+
+    if user.role != "admin":
+         return jsonify({"error": "You are not allowed to perform this acction"}, 401)
+
     email = request.json['email']
     action = request.json['action']
+
+    if not email or not email.strip() or len(email) < 3:
+        return jsonify({"error": "Body of your request has been changed"},401)
+    elif not action:
+        return jsonify({"error": "Body of your request has been changed"},401)
+    elif action != 'verified' and action != 'denied':
+        return jsonify({"error": "Body of your request has been changed"},401)
+
     user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"error": "Body of your request has been changed"},401)
 
     user.verified = action
 
@@ -56,14 +74,28 @@ def change_user_profile():
     password = request.json['password']
     birthday = request.json['birthday']
 
+    if not email or not email.strip() or len(email) < 3:
+        return jsonify({"error": "Body of your request has been changed"},401)
+    elif not name or not name.strip() or len(name) < 1:
+        return jsonify({"error": "You didnt input valid name "},401)
+    elif not last_name or not last_name.strip() or len(last_name) < 1:
+        return jsonify({"error": "You didnt input valid lastname "},401)
+    elif not birthday:
+        return jsonify({"error": "You didnt input valid birthday "},401)
+    
+
     user = User.query.filter_by(email=current_user).first()
 
+    if not user:
+        return jsonify({"error": "Token not valid"},401)
     #ovdje sad ifovi, da li ime nesto ima u sebi, prezime isto, email da li vec postoji da li je validan email, password da li se vec podudara b day da li veci manji i 18+ godina
 
-    user.name = name
-    user.last_name = last_name
-    user.email = email
-    user.password = User.generete_password(password)
+    user.name = name.strip()
+    user.last_name = last_name.strip()
+    user.email = email.strip()
+    if password.strip():
+        user.password = User.generete_password(password)
+
     user.birthday = birthday
 
     db.session.commit()

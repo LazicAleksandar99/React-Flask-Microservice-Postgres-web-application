@@ -3,6 +3,8 @@ import React , {useState, useRef, useEffect} from 'react';
 import DropdownList from "react-widgets/DropdownList";
 import { useGetAllProductsQuery } from '../context/product/productApiSlice';
 import { useAddAnnouncementMutation } from '../context/announcement/announcementApiSlice'
+import { showSuccessToastMessage, showErrorToastMessage } from '../components/ToastNotifications';
+
 import "react-widgets/styles.css";
 
 const NewAnnouncement= () =>{
@@ -23,7 +25,6 @@ const NewAnnouncement= () =>{
         isError,
         error 
       } = useGetAllProductsQuery(undefined, {refetchOnMountOrArgChange: true});
-    
 
     useEffect(() => {
         //headingRef.current.focus();   
@@ -34,17 +35,26 @@ const NewAnnouncement= () =>{
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
+        /*
+        const showToastMessage = (msg) => {
+        toast.success(msg, {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+        */
         try{
           const response = await addAnnouncement({heading, description, name})
           console.log(response)
-        }catch(error){
+          if(response?.data[0]?.error){
+            showErrorToastMessage(response?.data?.error)
+          }
+          else if(response?.data[0]?.created){
+            showSuccessToastMessage(response?.data[0]?.created)
+          } 
 
+        }catch(error){
+          //console.log(response)
         }
-        // //provjere
-        //  if(name = '')
-        //     setName(products.products[0].name)
-        // console.log(add_response)
-        //try catch ifovi....
     }
 
 
@@ -66,6 +76,7 @@ const NewAnnouncement= () =>{
                     className="form-control form-control-lg" 
                     onChange={(e) => setHeading(e.target.value)}
                     value={heading}
+                    required
                 />
                 <label className="form-label mt-1" htmlFor="headingID">Heading</label>
                 </div>

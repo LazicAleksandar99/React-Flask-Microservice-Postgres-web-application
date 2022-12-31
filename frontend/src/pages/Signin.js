@@ -7,6 +7,9 @@ import { setUser } from '../context/user/userSlice';
 import { useLoginMutation } from '../context/authApiSlice';
 import { setProducts } from '../context/product/productSlice';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const SignIn= () =>{
 
   const emailRef = useRef();
@@ -29,6 +32,7 @@ const SignIn= () =>{
       const response = await login({email,password})
       
       if(response?.data[0]?.error){
+        console.log(response)
         alert(response?.data?.error)
       }
       else if(response?.data[0]?.token){
@@ -39,6 +43,9 @@ const SignIn= () =>{
         console.log(response?.data[0]?.user[0])
         setEmail('')
         setPassword('')
+         toast.success("BRAVOO", {
+          position: toast.POSITION.BOTTOM_RIGHT
+      });
         navigate('/home')
       }
 

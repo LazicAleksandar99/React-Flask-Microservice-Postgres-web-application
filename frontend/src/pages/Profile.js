@@ -28,9 +28,8 @@ const Profile= () =>{
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-
     try{
-      const response = await changeUserProfile({name, last_name, email, birthday, password})
+      const response = await changeUserProfile({name, last_name, email, password,birthday})
 
       console.log(response)
       console.log(response?.data[0])
@@ -39,7 +38,15 @@ const Profile= () =>{
       }
       else if (response?.data[0]?.token){
         dispatch(setCredentials({...response?.data[0]}))
-        dispatch(changeUser({name, last_name, email}))
+        console.log('EVO DATUMA: birthday' + birthday)
+        const bday = new Date(new Date(birthday) - new Date().getTimezoneOffset() * 60000).toISOString()
+        const bday_string = bday.toString()
+        console.log('EVO DATUMA:  bday ' + bday)
+        console.log('EVO DATUMA:  bday_string' + bday_string)
+        const sting_bday = bday.slice(0,19)
+        console.log('EVO DATUMA:  sting_bday' + sting_bday)
+
+        dispatch(changeUser({name, last_name, email,birthday: sting_bday}))
       }
     }catch(error){
       console.log(error)
@@ -137,8 +144,7 @@ const Profile= () =>{
                           <label className="labels mt-1 mb-2">Password</label>
                           <input 
                               type="password" 
-                              name="password" 
-                              required 
+                              name="password"
                               className="form-control" 
                               placeholder="password"
                               value={password}
@@ -149,8 +155,7 @@ const Profile= () =>{
                           <label className="labels mt-1 mb-2">Confirm password</label>
                           <input 
                               type="password"
-                              name="second_password" 
-                              required 
+                              name="second_password"
                               className="form-control" 
                               placeholder="confirm password"
                               value={passwordAgain}

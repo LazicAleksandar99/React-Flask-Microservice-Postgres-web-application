@@ -27,17 +27,17 @@ def add_product():
     heading = request.json['heading']
     description = request.json['description']
 
-    if name or name.strip():
+    if not name or not name.strip() or len(name) < 1:
         return jsonify({"error": "You didnt input valid name "},401)
-    elif heading or heading.strip():
+    elif not heading or not heading.strip() or len(heading) < 1:
         return jsonify({"error": "You didnt input valid heading"},401)
-    elif description or description.strip():
+    elif not description or not description.strip() or len(description) < 1:
         return jsonify({"error": "You didnt input valid description"},401)
 
     product = Product.query.filter_by(name=name).first()
     
-    if product:
-        return jsonify({"error": "Name dosen't match any product"},401)
+    if not product:
+        return jsonify({"error": "Name doesn't match any product"},401)
 
     new_announcement = Announcement(heading, description, product.product_id, user.account_id, product.picture)
 
@@ -56,9 +56,6 @@ def get_all_announcements():
     user = User.query.filter_by(email = current_user).first()
     announcements = Announcement.query.all()
  
-    if not user:
-        return jsonify({"error": "Not valid token"}, 401)
-
     if user.role == "creator":
         all_announcements = announcements_schema.dump(
             filter(lambda t: t.owner_id == user.account_id, announcements)
@@ -77,14 +74,16 @@ def delete_announcement(id):
     current_user = get_jwt_identity()
 
     user = User.query.filter_by(email=current_user).first()
-    if user:
-        return jsonify({"error": "User not existing"}, 401)
 
     if user.role != "creator":
          return jsonify({"error": "You are not allowed to perform this acction"}, 401)
 
     #treba vidjet da li je ovaj user tata za ovaj announcement
     announcement = Announcement.query.get(id)
+
+    if user.account_id != announcement.owner_id:
+         return jsonify({"error": "You are not authorized to delete this announcement"},401)
+
     db.session.delete(announcement)
     db.session.commit()
 
