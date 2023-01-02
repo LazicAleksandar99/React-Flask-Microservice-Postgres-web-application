@@ -1,5 +1,4 @@
 import React from "react";
-
 import AnnouncementCard from "./AnnouncementCard";
 
 const AnnouncementList = ({ announcementsData }) => {

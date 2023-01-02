@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentProducts } from '../context/product/productSlice';
 import { useDeleteProductMutation } from '../context/product/productApiSlice';
 import { setProducts } from '../context/product/productSlice';
+import { showErrorToastMessage } from '../components/ToastNotifications';
 
 const Products= () =>{
 
@@ -39,11 +40,21 @@ const Products= () =>{
   const handleProductDelete = async (event, id) => {
     try{
         const response = await deleteProduct(id)
-        dispatch(setProducts({...response?.data[0]}))
-        setProductsData(response?.data[0].products)
-        setProductsFullData(response?.data[0].products)
+
+        if(response?.data[0]?.error){
+          const message = response.data[0].error
+          showErrorToastMessage(message)
+        }
+        else if (response?.date[0]?.deleted){
+          const message = response.data[0].deleted      
+          showErrorToastMessage(message)
+          dispatch(setProducts({...response?.data[0]}))
+          setProductsData(response?.data[0].products)
+          setProductsFullData(response?.data[0].products)
+
+        }
     }catch(error){
-        console.log(error)
+        showErrorToastMessage(error)
     }
   };
 
@@ -60,8 +71,6 @@ const Products= () =>{
           -1
       );
     }
-    console.log(searchInput)
-    console.log(updatedList)
     updatedList = updatedList.filter(
       (item) => item.price >= minPrice && item.price <= maxPrice
     );
@@ -74,6 +83,7 @@ const Products= () =>{
   },[selectedPrice,searchInput,productsFullData])
 
   const currentPosts = productsData.slice(firstPostIndex, lastPostIndex);
+
   content = 
   <div className="container text-center" style={{paddingTop: "4%", paddingBottom: "2%"}}>       
     <div className=" row" style={{paddingTop: "1rem"}}>

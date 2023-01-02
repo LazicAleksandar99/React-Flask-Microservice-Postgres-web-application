@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import axios from '../api/axios'
 import {useAddProductMutation } from '../context/product/productApiSlice';
 import { useDispatch } from 'react-redux';
-import { addNewProduct, setProducts } from '../context/product/productSlice';
+import { setProducts } from '../context/product/productSlice';
 import { showErrorToastMessage, showSuccessToastMessage } from '../components/ToastNotifications';
 import { ToastContainer } from 'react-toastify';
 
@@ -61,7 +61,6 @@ const NewProduct = () =>{
             }
         }
       }
-    
 
     return ( 
         <div className="text-center add-product-body">

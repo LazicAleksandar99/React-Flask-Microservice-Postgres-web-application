@@ -1,4 +1,5 @@
 import React from 'react';
+
 import "../assets/styles/Footer.css"
 
 const Footer= () =>{
@@ -11,13 +12,13 @@ const Footer= () =>{
         <div className="col">
           <h4>Logo</h4>
             <br></br>
-          <h4 className="list-unstyled">
+          <h5 className="list-unstyled">
             <li>+381 64 123 1283</li>
             <li>Novi Sad, Serbia</li>
             <li>Kost Racina 23</li>
             <br></br>
             <br></br>
-          </h4>
+          </h5>
         </div>
         {/* Column2 */}
         <div className="col">

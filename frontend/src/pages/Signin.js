@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect} from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import '../assets/styles/Signin.css';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../context/authSlice';
 import { setUser } from '../context/user/userSlice';
@@ -8,6 +7,9 @@ import { useLoginMutation } from '../context/authApiSlice';
 import { setProducts } from '../context/product/productSlice';
 import { showErrorToastMessage } from '../components/ToastNotifications';
 import { ToastContainer } from 'react-toastify';
+import Loading from './Loading';
+
+import '../assets/styles/Signin.css';
 
 const SignIn= () =>{
 
@@ -15,9 +17,7 @@ const SignIn= () =>{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
-
   const [login, { isLoading }] = useLoginMutation()
-
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -42,14 +42,12 @@ const SignIn= () =>{
         setPassword('')
         navigate('/home')
       }
-
-
     } catch(errorMsg){
       showErrorToastMessage(errorMsg)
     }
   }
 
-  const content = isLoading ? <h1>Loading...</h1> : (
+  const content = isLoading ? <Loading/> : (
     <div className='text-center'> 
        <section className="vh-100">
         <div className="container-fluid">

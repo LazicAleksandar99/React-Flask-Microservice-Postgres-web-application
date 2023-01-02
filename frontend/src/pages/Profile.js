@@ -3,17 +3,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser} from '../context/user/userSlice';
 import { useChangeUserProfileMutation } from '../context/user/userApiSlice';
 import { setCredentials } from '../context/authSlice';
-import { changeUser } from '../context/user/userSlice'
-import { useNavigate } from 'react-router-dom';
+import { changeUser } from '../context/user/userSlice';
 import DatePicker from "react-datepicker";
+import { ToastContainer } from 'react-toastify';
+import { showErrorToastMessage, showSuccessToastMessage } from '../components/ToastNotifications';
 
+import "../../node_modules/react-datepicker/dist/react-datepicker.css";
+import '../assets/styles/Profile.css';
 
-import "../../node_modules/react-datepicker/dist/react-datepicker.css"
-import '../assets/styles/Profile.css'
 const Profile= () =>{
 
   const user = useSelector(selectCurrentUser)
-
   const [name, setName] = useState(user.name);
   const [last_name, setLastName] = useState(user.last_name);
   const [email, setEmail] = useState(user.email);
@@ -21,8 +21,7 @@ const Profile= () =>{
   const [passwordAgain, setPasswordAgain] = useState('');
   const [birthday, setBirthday] = useState(new Date(user.birthday));
 
-  let content 
-  const navigate = useNavigate()
+  let content
   const dispatch = useDispatch()
   const [changeUserProfile] = useChangeUserProfileMutation()
 
@@ -31,54 +30,21 @@ const Profile= () =>{
     try{
       const response = await changeUserProfile({name, last_name, email, password,birthday})
 
-      console.log(response)
-      console.log(response?.data[0])
       if(response?.data[0]?.error){
-            alert(response?.data?.error)
+          const message = response.data[0].error
+          showErrorToastMessage(message)
       }
       else if (response?.data[0]?.token){
+        showSuccessToastMessage("Successfully updated updated profile")
         dispatch(setCredentials({...response?.data[0]}))
-        console.log('EVO DATUMA: birthday' + birthday)
-        const bday = new Date(new Date(birthday) - new Date().getTimezoneOffset() * 60000).toISOString()
-        const bday_string = bday.toString()
-        console.log('EVO DATUMA:  bday ' + bday)
-        console.log('EVO DATUMA:  bday_string' + bday_string)
-        const sting_bday = bday.slice(0,19)
-        console.log('EVO DATUMA:  sting_bday' + sting_bday)
-
-        dispatch(changeUser({name, last_name, email,birthday: sting_bday}))
+        const right_format_birthday_created = new Date(new Date(birthday) - new Date().getTimezoneOffset() * 60000).toISOString()
+        //const right_format_birthday_string = right_format_birthday_created.toString()
+        const right_format_birthday = right_format_birthday_created.slice(0,19)
+        dispatch(changeUser({name, last_name, email,birthday: right_format_birthday}))
       }
     }catch(error){
-      console.log(error)
+        showErrorToastMessage(error)
     }   
-    // try{
-    //   const response = await login({email,password})
-      
-    //   if(response?.data[0]?.error){
-    //     alert(response?.data?.error)
-    //   }
-    //   else if(response?.data[0]?.token){
-    //     dispatch(setCredentials({...response?.data[0]}))
-    //     dispatch(setUser({...response?.data[0]}))
-    //     console.log(response?.data[0]?.user[0])
-    //     setEmail('')
-    //     setPassword('')
-    //     navigate('/home')
-    //   }
-
-
-    // } catch(errorMsg){
-    //   //moram ovdje ivdjet koji erori
-    //   console.log(errorMsg)
-    //   if (!errorMsg?.response) {
-    //   } else if (errorMsg.response?.status === 400) {
-    //       alert('Missing Username or Password')
-    //   } else if (errorMsg.response?.status === 401) {
-    //       alert('Unauthorized')
-    //   } else {
-    //       alert('Login Failed')
-    //   }
-    // }
   }
 
   content = 
@@ -171,6 +137,7 @@ const Profile= () =>{
             </div>
           </div>
         </div>
+        <ToastContainer/>
       </div>
 
   return content

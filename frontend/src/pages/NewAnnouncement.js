@@ -15,10 +15,8 @@ const NewAnnouncement= () =>{
     const [description, setDescription] = useState('');
     const [name, setName] = useState('');
 
-    let content
-    //const [addProduct] = useAddProductMutation();
     const [addAnnouncement] = useAddAnnouncementMutation();
-
+    let content
     const {
         data: products,
         isLoading,
@@ -31,7 +29,6 @@ const NewAnnouncement= () =>{
         //headingRef.current.focus();   
       }, [])
 
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -41,11 +38,11 @@ const NewAnnouncement= () =>{
           console.log(response)
           if(response?.data[0]?.error){
             const message = response?.data[0]?.error
-            showErrorToastMessage(response?.data?.error)
+            showErrorToastMessage(message)
           }
           else if(response?.data[0]?.created){
             const message = response?.data[0]?.created
-            showSuccessToastMessage(response?.data[0]?.created)
+            showSuccessToastMessage(message)
           } 
 
         }catch(error){
@@ -53,9 +50,8 @@ const NewAnnouncement= () =>{
         }
     }
 
-
     if(isLoading){
-        content = Loading
+        content = <Loading/>
       }else if(isSuccess){
         const names = products.products.map(object => object.name);
         content = 
@@ -108,7 +104,8 @@ const NewAnnouncement= () =>{
     </div>
           
       }else if(isError){
-        content = <p>Error</p>
+        showErrorToastMessage(error)
+        content = <div><ToastContainer/></div>
       }
 
     return content

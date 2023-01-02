@@ -8,9 +8,11 @@ import { selectCurrentToken } from '../context/authSlice';
 import Loading from './Loading';
 
 import "../assets/styles/Home.css"
+import { ToastContainer } from 'react-toastify';
+import { showErrorToastMessage } from '../components/ToastNotifications';
+
 const Home= () =>{
 
-  //const [left,setLeft] = useState(true)
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(8);
   const lastPostIndex = currentPage * postsPerPage;
@@ -34,11 +36,10 @@ const Home= () =>{
   }
 
   if(isLoading){
-    content = Loading 
+    content = <Loading/> 
   }else if(isSuccess){
-    console.log("announcements:")
-    console.log(announcements)
       const currentPosts = announcements.announcements.slice(firstPostIndex, lastPostIndex);
+      
       content = 
       <div>
         <div id="myCarousel" className="carousel slide" data-bs-ride="carousel">
@@ -54,9 +55,8 @@ const Home= () =>{
               <div className="container">
                 <div className="carousel-caption text-start">
                   <h1>Example headline.</h1>
-                  <p>Some representative placeholder content for the first slide of the carousel.</p>                <br></br>
-
-                  {/* <p><a className="btn btn-lg btn-primary" href="#">Sign up today</a></p> */}
+                  <p>Some representative placeholder content for the first slide of the carousel.</p>                
+                  <br></br>
                 </div>
               </div>
             </div>
@@ -66,9 +66,8 @@ const Home= () =>{
               <div className="container">
                 <div className="carousel-caption">
                   <h1>Another example headline.</h1>
-                  <p>Some representative placeholder content for the second slide of the carousel.</p>                <br></br>
-
-                  {/* <p><a className="btn btn-lg btn-primary" href="#">Learn more</a></p> */}
+                  <p>Some representative placeholder content for the second slide of the carousel.</p> 
+                  <br></br>
                 </div>
               </div>
             </div>
@@ -80,7 +79,6 @@ const Home= () =>{
                   <h1>One more for good measure.</h1>
                   <p>Some representative placeholder content for the third slide of this carousel.</p>
                   <br></br>
-                  {/* <p><a className="btn btn-lg btn-primary" href="#">Browse gallery</a></p> */}
                 </div>
               </div>
             </div>
@@ -105,10 +103,12 @@ const Home= () =>{
             { role == "creator" ? <button onClick={forwardToNewAnnouncement}>New Announcement</button> : <div></div>}
 
         </div>
+        <ToastContainer/>
       </div>
       
   }else if(isError){
-    content = <p>Error</p>
+    showErrorToastMessage(error)
+    content = <div><ToastContainer/></div>
   }
   return (
     content

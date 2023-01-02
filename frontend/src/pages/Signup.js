@@ -1,27 +1,26 @@
 import React,  { useState, useRef, useEffect, } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import DatePicker from "react-datepicker";
+import { useRegistrationMutation } from '../context/registrationApiSlice';
+import { showErrorToastMessage } from '../components/ToastNotifications';
+import { ToastContainer } from 'react-toastify';
+import Loading from './Loading';
+
 import "../../node_modules/react-datepicker/dist/react-datepicker.css"
 import "../assets/styles/Signup.css"
-import { useRegistrationMutation } from '../context/registrationApiSlice';
-import { showErrorToastMessage, showSuccessToastMessage } from '../components/ToastNotifications';
-import { ToastContainer } from 'react-toastify';
 
 const SignUp= () =>{
   
   const nameRef = useRef();
   const navigate = useNavigate()
-
   const [name, setName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
   const [birthday, setBirthday] = useState(new Date());
-
   const [register, { isLoading }] = useRegistrationMutation()
 
-  
   useEffect(() => {
     nameRef.current.focus();
   }, [])
@@ -44,8 +43,7 @@ const SignUp= () =>{
         showErrorToastMessage(message)
       }
       else{
-        //const message = response?.data[0]?.registered
-        //showSuccessToastMessage(message)
+        alert('Succefully created profile')
         navigate('/signin')
       }
 
@@ -54,7 +52,7 @@ const SignUp= () =>{
     }
   }
 
-  const content = isLoading ? <h1>Loading...</h1> : (
+  const content = isLoading ? <Loading/> : (
     <div className='bg-image'>
       <section className="vh-100 ">
         <div className="container h-100">
@@ -64,7 +62,6 @@ const SignUp= () =>{
                 <div className="card-body p-md-5">
                   <div className="row justify-content-center">
                     <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
                       <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
                       <form className="mx-1 mx-md-4">

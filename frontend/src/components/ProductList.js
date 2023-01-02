@@ -1,9 +1,10 @@
 import React from "react";
-
 import ProductCard from "./ProductCard";
+
 import "../assets/styles/ProductList.css";
 
 const ProductList = ({ productsData,deletedProduct }) => {
+
     return (
         <div className='product_list'>
             {productsData.map((product, index) => {
@@ -13,7 +14,7 @@ const ProductList = ({ productsData,deletedProduct }) => {
                         name={product.name}
                         picture={product.picture}
                         description={product.description}
-                        price={product.current_price}
+                        price={product.price}
                         id = {product.product_id}
                         deletedProduct = {deletedProduct}
                     />

@@ -1,8 +1,8 @@
 import React from 'react';
-import { createRoutesFromChildren } from 'react-router-dom';
 import { useDeleteAnnouncementMutation } from '../context/announcement/announcementApiSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../context/authSlice';
+import { showErrorToastMessage, showSuccessToastMessage } from './ToastNotifications';
 
 const AnnouncementCard= ({ heading, description, picture, left, id}) =>{
 
@@ -13,8 +13,17 @@ const AnnouncementCard= ({ heading, description, picture, left, id}) =>{
   const deleteAnnouncementById = async() => {
     try{
         const response = await deleteAnnouncement(id)
+
+        if(response?.data[0]?.error){
+          const message = response.data[0].error
+          showErrorToastMessage(message)
+        }
+        else if(response?.data[0]?.deleted){
+          const message = response.data[0].deleted
+          showSuccessToastMessage(message)
+        }
     }catch(error){
-        console.log(error)
+        showErrorToastMessage(error)
     }
   }
 
@@ -27,14 +36,6 @@ const AnnouncementCard= ({ heading, description, picture, left, id}) =>{
                 <p className="lead">{description}</p>
             </div>
             <div className={left ? "col-md-5 order-md-1": "col-md-5"}>
-            {/* <img 
-              src="https://res.cloudinary.com/dfms5eutq/image/upload/v1671932374/adfj2ppy7ied6xdtnhnc.png" 
-              className="featurette-image img-fluid mx-auto" 
-              alt="Responsive image" 
-              style={{width: '500',height: '500', preserveAspectRatio: 'xMidYMid slice', focusable: "false"}}
-
-              /> */}
-
                 <img className="bd-placeholder-img bd-placeholder-img-lg img-fluid mx-auto" src={picture} role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
             </div>
         </div>

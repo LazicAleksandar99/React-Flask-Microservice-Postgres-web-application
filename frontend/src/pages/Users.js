@@ -3,6 +3,8 @@ import { useGetAllUsersQuery } from '../context/user/usersApiSlice';
 import Pagination from "../components/Pagination";
 import UserList from '../components/UserList';
 import { ToastContainer } from 'react-toastify';
+import Loading from './Loading';
+import { showErrorToastMessage } from '../components/ToastNotifications';
 
 const Users= () =>{
 
@@ -20,11 +22,9 @@ const Users= () =>{
         error 
     } = useGetAllUsersQuery(undefined, {refetchOnMountOrArgChange: true});
 
-
     if(isLoading){
-        content = <div><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br></div> 
+        content = <Loading/>
     }else if(isSuccess){
-        console.log(users)
         const currentPosts = users.users.slice(firstPostIndex, lastPostIndex);
         content = 
         <div>
@@ -39,11 +39,9 @@ const Users= () =>{
         </div>
         
     }else if(isError){
-        console.log(error)
-        content = <p>Error</p>
+        showErrorToastMessage(error)
+        content = <div><ToastContainer/></div>
     }
-
-
     return content
 }
 export default Users;
