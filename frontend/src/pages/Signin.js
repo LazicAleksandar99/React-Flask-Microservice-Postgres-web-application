@@ -6,9 +6,8 @@ import { setCredentials } from '../context/authSlice';
 import { setUser } from '../context/user/userSlice';
 import { useLoginMutation } from '../context/authApiSlice';
 import { setProducts } from '../context/product/productSlice';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { showErrorToastMessage } from '../components/ToastNotifications';
+import { ToastContainer } from 'react-toastify';
 
 const SignIn= () =>{
 
@@ -32,35 +31,21 @@ const SignIn= () =>{
       const response = await login({email,password})
       
       if(response?.data[0]?.error){
-        console.log(response)
-        alert(response?.data?.error)
+        const message = response?.data[0]?.error
+        showErrorToastMessage(message)
       }
       else if(response?.data[0]?.token){
-        console.log(response)
         dispatch(setCredentials({...response?.data[0]}))
         dispatch(setUser({...response?.data[0]}))
         dispatch(setProducts({...response?.data[0]}))
-        console.log(response?.data[0]?.user[0])
         setEmail('')
         setPassword('')
-         toast.success("BRAVOO", {
-          position: toast.POSITION.BOTTOM_RIGHT
-      });
         navigate('/home')
       }
 
 
     } catch(errorMsg){
-      //moram ovdje ivdjet koji erori
-      console.log(errorMsg)
-      if (!errorMsg?.response) {
-      } else if (errorMsg.response?.status === 400) {
-          alert('Missing Username or Password')
-      } else if (errorMsg.response?.status === 401) {
-          alert('Unauthorized')
-      } else {
-          alert('Login Failed')
-      }
+      showErrorToastMessage(errorMsg)
     }
   }
 
@@ -122,6 +107,7 @@ const SignIn= () =>{
           </div>
         </div>
       </section>
+      <ToastContainer></ToastContainer>
     </div>
   )
 

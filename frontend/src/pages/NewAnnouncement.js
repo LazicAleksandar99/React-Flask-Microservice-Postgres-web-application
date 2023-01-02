@@ -1,9 +1,10 @@
 import React , {useState, useRef, useEffect} from 'react';
-// import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import DropdownList from "react-widgets/DropdownList";
 import { useGetAllProductsQuery } from '../context/product/productApiSlice';
 import { useAddAnnouncementMutation } from '../context/announcement/announcementApiSlice'
 import { showSuccessToastMessage, showErrorToastMessage } from '../components/ToastNotifications';
+import { ToastContainer } from 'react-toastify';
+import Loading from './Loading';
 
 import "react-widgets/styles.css";
 
@@ -35,31 +36,26 @@ const NewAnnouncement= () =>{
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
-        /*
-        const showToastMessage = (msg) => {
-        toast.success(msg, {
-            position: toast.POSITION.TOP_RIGHT
-        });
-    };
-        */
         try{
           const response = await addAnnouncement({heading, description, name})
           console.log(response)
           if(response?.data[0]?.error){
+            const message = response?.data[0]?.error
             showErrorToastMessage(response?.data?.error)
           }
           else if(response?.data[0]?.created){
+            const message = response?.data[0]?.created
             showSuccessToastMessage(response?.data[0]?.created)
           } 
 
         }catch(error){
-          //console.log(response)
+          showErrorToastMessage(error)
         }
     }
 
 
     if(isLoading){
-        content = <div><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br><p>Loading...</p> <br></br></div> 
+        content = Loading
       }else if(isSuccess){
         const names = products.products.map(object => object.name);
         content = 
@@ -108,6 +104,7 @@ const NewAnnouncement= () =>{
 
             </form>
         </main>
+        <ToastContainer/>
     </div>
           
       }else if(isError){

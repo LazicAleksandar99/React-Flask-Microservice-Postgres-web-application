@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useGetAllUsersQuery } from '../context/user/usersApiSlice';
 import Pagination from "../components/Pagination";
 import UserList from '../components/UserList';
+import { ToastContainer } from 'react-toastify';
 
 const Users= () =>{
 
@@ -34,9 +35,11 @@ const Users= () =>{
                     setCurrentPage={setCurrentPage}
                     currentPage={currentPage}
                 />
+        <ToastContainer/>
         </div>
         
     }else if(isError){
+        console.log(error)
         content = <p>Error</p>
     }
 

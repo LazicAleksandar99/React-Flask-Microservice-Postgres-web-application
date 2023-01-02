@@ -1,6 +1,6 @@
 import React from 'react';
 import { useChangeUserVerificationStatusMutation } from '../context/user/usersApiSlice';
-
+import { showErrorToastMessage, showSuccessToastMessage } from './ToastNotifications';
 const UserCard= ({ birthday, email, name, last_name, role, status}) =>{
 
   const [changeUserVerificationStatus] = useChangeUserVerificationStatusMutation()
@@ -20,8 +20,16 @@ const UserCard= ({ birthday, email, name, last_name, role, status}) =>{
       try{
         const response = await changeUserVerificationStatus({action,email})
         console.log(response)
+        if(response?.data[0]?.error){
+          const message = response?.data[0]?.error
+          showErrorToastMessage(message)
+        }
+        else if(response?.data[0]?.verified){
+          const message = response?.data[0]?.verified
+          showSuccessToastMessage(message)
+        }
       }catch(error){
-
+        showErrorToastMessage(error)
       }
     // try{
     //   const response = await register({name, last_name, email, birthday, password,type})

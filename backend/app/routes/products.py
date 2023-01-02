@@ -24,8 +24,11 @@ def add_product():
     
     user = User.query.filter_by(email=current_user).first()
 
+    if not user: 
+        return jsonify({"error": "Token not valid"}, 401)
+
     if user.role != "creator":
-         return jsonify({"error": "You are not allowed to perform this acction"}, 401)
+        return jsonify({"error": "You are not allowed to perform this acction"}, 401)
 
     name = request.json['name']
     description = request.json['description']
@@ -44,6 +47,11 @@ def add_product():
     elif 0 > int(price) or int(price) > 10000:
         return jsonify({"error": "You didnt input valid price(min 1 max 10000"},401)
     
+    the_product = Product.query.filter_by(name=name).first()
+
+    if the_product:
+        return jsonify({"error": "Product with that name already exists"},401)
+
     new_product = Product(name, description, picture, int(price), user.account_id)
     db.session.add(new_product)
     db.session.commit()

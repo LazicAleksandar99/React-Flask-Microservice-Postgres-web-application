@@ -58,7 +58,7 @@ def update_user():
     user.verified = action
 
     db.session.commit()
-    return jsonify({"Verified": "New user succesfuly verified"}, 201)
+    return jsonify({"verified": "New user succesfuly verified"}, 201)
 
 
 @bp_user.route('/change', methods=['PUT'])

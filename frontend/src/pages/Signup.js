@@ -4,7 +4,8 @@ import DatePicker from "react-datepicker";
 import "../../node_modules/react-datepicker/dist/react-datepicker.css"
 import "../assets/styles/Signup.css"
 import { useRegistrationMutation } from '../context/registrationApiSlice';
-
+import { showErrorToastMessage, showSuccessToastMessage } from '../components/ToastNotifications';
+import { ToastContainer } from 'react-toastify';
 
 const SignUp= () =>{
   
@@ -36,26 +37,20 @@ const SignUp= () =>{
   const submitRegistration = async (type) => {
 
     try{
-      const response = await register({name, last_name, email, birthday, password,type})
+      const response = await register({name, last_name, email, birthday, password, password_again: passwordAgain,type})
 
       if(response?.data[0]?.error){
-        alert(response?.data[0]?.error)
+        const message = response?.data[0]?.error
+        showErrorToastMessage(message)
       }
       else{
-        alert(response?.data[0]?.registered)
+        //const message = response?.data[0]?.registered
+        //showSuccessToastMessage(message)
         navigate('/signin')
       }
 
     }catch(errorMsg){
-      console.log("u kecu sam")
-      if (!errorMsg?.response) {
-      } else if (errorMsg.response?.status === 400) {
-          alert('Missing Username or Password')
-      } else if (errorMsg.response?.status === 401) {
-          alert('Unauthorized')
-      } else {
-          alert('Login Failed')
-      }
+      showErrorToastMessage(errorMsg)
     }
   }
 
@@ -132,7 +127,7 @@ const SignUp= () =>{
                               id="form3Example4c" 
                               className="form-control"
                               value={password} 
-                              onChange={(e) => setPassword(e.target.value)} 
+                              onChange={(e) => setPassword(e.target.value)}
                             />
                             <label className="form-label" htmlFor="form3Example4c">Password</label>
                           </div>
@@ -146,7 +141,7 @@ const SignUp= () =>{
                               id="form3Example4cd" 
                               className="form-control" 
                               value={passwordAgain} 
-                              onChange={(e) => setPasswordAgain(e.target.value)} 
+                              onChange={(e) => setPasswordAgain(e.target.value)}
                             />
                             <label className="form-label" htmlFor="form3Example4cd">Repeat your password</label>
                           </div>
@@ -177,6 +172,7 @@ const SignUp= () =>{
           </div>
         </div>
       </section>
+      <ToastContainer/>
     </div>
   )
 

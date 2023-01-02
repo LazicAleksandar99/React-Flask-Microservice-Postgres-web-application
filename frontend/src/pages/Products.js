@@ -2,18 +2,13 @@ import React , { useState, useEffect} from 'react';
 import ProductList from '../components/ProductList';
 import Pagination from '../components/Pagination';
 import FilterPanel from '../components/FilterPanel';
-import { Link } from "react-router-dom";
-import { useGetAllProductsQuery } from '../context/product/productApiSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCurrentToken } from '../context/authSlice';
 import { selectCurrentProducts } from '../context/product/productSlice';
 import { useDeleteProductMutation } from '../context/product/productApiSlice';
 import { setProducts } from '../context/product/productSlice';
 
 const Products= () =>{
-  //jedan if sa divom ako je prazno da napravi div bijeli visine 800 i tekstom u sredini
-  //const [theproducts, setTheProducts] = useState('')
- // const [selectedPrice, setSelectedPrice] = useState([1000, 5000]);
+
   const [productsData, setProductsData] = useState(useSelector(selectCurrentProducts))
   const [productsFullData, setProductsFullData] =  useState(useSelector(selectCurrentProducts))
   const [searchInput, setSearchInput] = useState('');
@@ -26,11 +21,8 @@ const Products= () =>{
   const [deleteProduct] = useDeleteProductMutation()
 
   const dispatch = useDispatch()
-  const minDistance = 10;
-  const token = useSelector(selectCurrentToken)  
-  let content  
-  const role = JSON.parse(atob(token.split('.')[1])).role
-
+  const minDistance = 10; 
+  let content
   
   const handleChangePrice = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -96,7 +88,6 @@ const Products= () =>{
               changePrice={handleChangePrice}
             />
           </div>
-          {role == "creator" ? <button> <Link to="/new/product" className  ="link-primary">Add new product</Link></button> : <div></div>}
         </div>
       </div>
       <div className="col-9">

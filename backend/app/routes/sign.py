@@ -27,6 +27,9 @@ def sign_in():
 
     user = User.query.filter_by(email=email).first()
 
+    if not user:
+        return jsonify({"error": "Bad email"},401)
+
     if user.verified == "pending":
         return jsonify({"error": "You are still in process of verification. Please be patiant"},401)
 
@@ -53,7 +56,7 @@ def sign_in():
         response = jsonify({'token': token, 'user': the_user, 'products': the_products}, 200)
         return response
     else:
-        response = jsonify({"error": "Bad username or password"}, 401)
+        response = jsonify({"error": "Bad password"}, 401)
         return response
 
 
@@ -65,7 +68,8 @@ def sign_up():
     email = request.json['email']
     password = request.json['password']
     birthday = request.json['birthday']
-    type = request.json['type'] # if da ne smije biti admin
+    type = request.json['type']
+    password_again = request.json['password_again']
     
     if not name or not name.strip() or len(name) < 1:
         return jsonify({"error": "You didnt input valid name "},401)
@@ -79,6 +83,8 @@ def sign_up():
         return jsonify({"error": "You will be baned if you try to manipulate with request fileds"},401)
     elif type != "creator" and type != "customer":
         return jsonify({"error": "You will be baned if you try to manipulate with request fileds"},401)
+    elif password != password_again:
+        return jsonify({"error": "Your password doesn't match!"},401)
 
     old_user = User.query.filter_by(email=email).first()
 

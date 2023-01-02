@@ -3,6 +3,8 @@ import axios from '../api/axios'
 import {useAddProductMutation } from '../context/product/productApiSlice';
 import { useDispatch } from 'react-redux';
 import { addNewProduct, setProducts } from '../context/product/productSlice';
+import { showErrorToastMessage, showSuccessToastMessage } from '../components/ToastNotifications';
+import { ToastContainer } from 'react-toastify';
 
 import '../assets/styles/NewProduct.css'
 
@@ -12,8 +14,7 @@ const NewProduct = () =>{
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(1);
-    const [image, setImage] = useState('');  
-    const [imageURL, setImageURL] = useState('');
+    const [image, setImage] = useState('');
 
     const [addProduct] = useAddProductMutation();
     const dispatch = useDispatch()
@@ -25,18 +26,40 @@ const NewProduct = () =>{
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
-        //prvo ifovi...
-        const formData = new FormData()
-        console.log(image)
-        formData.append("file", image)
-        formData.append("upload_preset", "zbrgafkf")
-        //formData.append("format", "svg")
+        if(image === undefined){
+            showErrorToastMessage('Please select picture!!!')
+        }
+        else{
+            const formData = new FormData()
+            console.log(image)
+            formData.append("file", image)
+            formData.append("upload_preset", "zbrgafkf")
 
-        const response = await axios.post('https://api.cloudinary.com/v1_1/dfms5eutq/image/upload',formData)
-       // setImageURL(response.data.url)
-        const add_response = await addProduct({name,description, picture: response.data.url, price})
-        dispatch(setProducts({...add_response?.data[0]}))
-        //try catch ifovi....
+            try{
+                const response = await axios.post('https://api.cloudinary.com/v1_1/dfms5eutq/image/upload',formData)
+                const add_response = await addProduct({name,description, picture: response.data.url, price})
+                
+                if(add_response?.error){
+                    const message = add_response?.error?.data?.msg
+                    showErrorToastMessage(message)  
+                }else if(add_response?.data[0]?.error){
+                    const message = add_response?.data[0]?.error
+                    showErrorToastMessage(message)
+                }
+                else if(add_response?.error){
+                    const message = add_response?.error?.data?.msg
+                    showErrorToastMessage(message)  
+                }
+                else if(add_response?.data[0]?.created){
+                    const message = add_response?.data[0]?.created
+                    showSuccessToastMessage(message)
+                    dispatch(setProducts({...add_response?.data[0]}))
+                }
+            }
+            catch(errorMsg){
+                showErrorToastMessage(errorMsg)
+            }
+        }
       }
     
 
@@ -55,6 +78,7 @@ const NewProduct = () =>{
                         className="form-control form-control-lg" 
                         onChange={(e) => setName(e.target.value)}
                         value={name}
+                        required
                     />
                     <label className="form-label mt-1" htmlFor="nameID">Product name</label>
                     </div>
@@ -87,9 +111,7 @@ const NewProduct = () =>{
 
                     <div className="form-outline mb-4">
                     <input type="file" onChange={(e) => {setImage(e.target.files[0])}}></input>
-                    {/* <label className="form-label mt-1" htmlFor="priceID">Select picture</label> */}
                     </div>
-                    
 
                     <div className="pt-1 mb-4">
                     <button className="btn btn-primary btn-lg btn-block" type="submit">Add</button>
@@ -97,6 +119,7 @@ const NewProduct = () =>{
 
                 </form>
             </main>
+            <ToastContainer/>
         </div>
     );
 }
