@@ -6,9 +6,6 @@ from app.models.announcement import Announcement
 from app.models.product import Product, ProductSchema
 from app.models.user import User, UserSchema
 from flask_cors import cross_origin
-# import cloudinary
-
-# config = cloudinary.config(secure=True)
 
 bp_products = Blueprint('products', __name__, url_prefix='/product')
 
@@ -116,18 +113,6 @@ def delete_product(id):
     if user.role != "creator":
          return jsonify({"error": "You are not allowed to perform this acction"}, 401)
 
-    # Ovdje moram jos dodati da prvo uzmem sve announcmente pa onda idem redom i za onaj koji ima product_id= id i owner_id = user.account_id..
-    # announcement = Announcement.query.get(id)
-
-    # if user.account_id != announcement.owner_id:
-    #      return jsonify({"error": "You are not authorized to delete this announcement"},401)
-
-    # product = Product.query.get(id)
-
-    # if user.account_id != product.owner_id:
-    #      return jsonify({"error": "You are not authorized to delete this product"},401)    
-    #   db.session.delete(product)
-    #db.session.delete(announcement)
     Announcement.query.filter_by(product_id=id).delete()
     Product.query.filter_by(product_id=id).delete()
     db.session.commit()

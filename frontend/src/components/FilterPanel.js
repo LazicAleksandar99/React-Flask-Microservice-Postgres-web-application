@@ -28,7 +28,7 @@ const FilterPanel= ({selectedPrice,changePrice, value, changeInput}) =>{
             <SearchBar value={value} changeInput={changeInput}/>
         </div>
         <div >
-        {role == "creator" ? <button onClick={forwardToNewProductPage}> Add product </button> : <div></div>}
+        {role === "creator" ? <button onClick={forwardToNewProductPage}> Add product </button> : <div></div>}
         </div>
     </div>
   );

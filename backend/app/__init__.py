@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from app.extensions import db, migrate
-from app.models.user import User #jako bitno da se klase importaju da migracije mogu biti prepoznate
+from app.models.user import User
 from app.models.product import Product
 from app.models.announcement import Announcement
 from flask_jwt_extended import JWTManager

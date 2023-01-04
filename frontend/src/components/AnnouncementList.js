@@ -5,7 +5,6 @@ const AnnouncementList = ({ announcementsData }) => {
     return (
         <div >
             {announcementsData.map((announcement, index) => {
-                console.log('index: ' + index)
                 return (
                     <AnnouncementCard
                         key={index}
@@ -13,7 +12,7 @@ const AnnouncementList = ({ announcementsData }) => {
                         description={announcement.description}
                         picture={announcement.picture}
                         id = {announcement.announcement_id}
-                        left = {index % 2 == 0}
+                        left = {index % 2 === 0}
                     />
                 );
             })}

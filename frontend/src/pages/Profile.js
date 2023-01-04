@@ -28,7 +28,7 @@ const Profile= () =>{
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     try{
-      const response = await changeUserProfile({name, last_name, email, password,birthday})
+      const response = await changeUserProfile({name, last_name, email, password, birthday, password_again: passwordAgain})
 
       if(response?.data[0]?.error){
           const message = response.data[0].error
@@ -36,9 +36,8 @@ const Profile= () =>{
       }
       else if (response?.data[0]?.token){
         showSuccessToastMessage("Successfully updated updated profile")
-        dispatch(setCredentials({...response?.data[0]}))
+        dispatch(setCredentials({...response.data[0]}))
         const right_format_birthday_created = new Date(new Date(birthday) - new Date().getTimezoneOffset() * 60000).toISOString()
-        //const right_format_birthday_string = right_format_birthday_created.toString()
         const right_format_birthday = right_format_birthday_created.slice(0,19)
         dispatch(changeUser({name, last_name, email,birthday: right_format_birthday}))
       }
@@ -52,7 +51,7 @@ const Profile= () =>{
         <div className="row">
           <div className="col-md-4 border-right">
               <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                  <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"/>
+                  <img className="rounded-circle mt-5" width="150px" alt="profilePicture" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"/>
                   <div className="font-weight-bold" style={{color: 'black'}}>{name} {last_name}</div>
                   <div className="text-black-50" style={{color: 'black'}}>{email}</div>
               </div>

@@ -55,7 +55,7 @@ const UserCard= ({ birthday, email, name, last_name, role, status}) =>{
       <td>{status}</td>
       <td>
         {
-          status == "pending" ? <div>
+          status === "pending" ? <div>
           <button type="button" onClick={verifyUser} className="btn btn-success">Accept</button>
           <button type="button" onClick={denyUser} className="btn btn-danger">Deny</button>
           </div> : <div></div>

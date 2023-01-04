@@ -40,7 +40,7 @@ const Navbar= () =>{
                             <li className="nav-item">
                                 <Link  className="nav-link" to="/products">Products</Link >
                             </li>
-                            {role == "admin" ? 
+                            {role === "admin" ? 
                                 <li className="nav-item">
                                     <Link  className="nav-link" to="/users">Users</Link >
                                 </li>

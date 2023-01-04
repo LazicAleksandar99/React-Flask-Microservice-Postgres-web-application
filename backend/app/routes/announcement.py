@@ -78,7 +78,6 @@ def delete_announcement(id):
     if user.role != "creator":
          return jsonify({"error": "You are not allowed to perform this acction"}, 401)
 
-    #treba vidjet da li je ovaj user tata za ovaj announcement
     announcement = Announcement.query.get(id)
 
     if user.account_id != announcement.owner_id:

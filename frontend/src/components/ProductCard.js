@@ -21,7 +21,7 @@ const ProductCard = ({ name, description, picture, price, id, deletedProduct }) 
                     <h3>{price} $</h3>
                 </div>
             </div>
-            {role == "creator" ? <button type="button" onClick={event => deletedProduct(event, id )} className="btn btn-danger">Delete</button> : <div></div>}
+            {role === "creator" ? <button type="button" onClick={event => deletedProduct(event, id )} className="btn btn-danger">Delete</button> : <div></div>}
         </div>
     );
 };

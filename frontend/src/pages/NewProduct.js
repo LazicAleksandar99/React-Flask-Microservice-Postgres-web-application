@@ -14,7 +14,7 @@ const NewProduct = () =>{
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(1);
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
 
     const [addProduct] = useAddProductMutation();
     const dispatch = useDispatch()
@@ -24,14 +24,12 @@ const NewProduct = () =>{
       }, [])
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
-
-        if(image === undefined){
+        e.preventDefault();
+        if(image == undefined || image == null){
             showErrorToastMessage('Please select picture!!!')
         }
         else{
             const formData = new FormData()
-            console.log(image)
             formData.append("file", image)
             formData.append("upload_preset", "zbrgafkf")
 
@@ -71,7 +69,7 @@ const NewProduct = () =>{
 
                     <div className="form-outline mb-4">
                     <input 
-                         ref={nameRef} 
+                        ref={nameRef} 
                         type="text" 
                         id="nameID" 
                         className="form-control form-control-lg" 

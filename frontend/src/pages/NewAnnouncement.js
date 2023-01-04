@@ -1,4 +1,4 @@
-import React , {useState, useRef, useEffect} from 'react';
+import React , {useState} from 'react';
 import DropdownList from "react-widgets/DropdownList";
 import { useGetAllProductsQuery } from '../context/product/productApiSlice';
 import { useAddAnnouncementMutation } from '../context/announcement/announcementApiSlice'
@@ -10,12 +10,12 @@ import "react-widgets/styles.css";
 
 const NewAnnouncement= () =>{
 
-    const headingRef = useRef();
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
     const [name, setName] = useState('');
 
     const [addAnnouncement] = useAddAnnouncementMutation();
+
     let content
     const {
         data: products,
@@ -25,23 +25,18 @@ const NewAnnouncement= () =>{
         error 
       } = useGetAllProductsQuery(undefined, {refetchOnMountOrArgChange: true});
 
-    useEffect(() => {
-        //headingRef.current.focus();   
-      }, [])
-
-
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
         try{
           const response = await addAnnouncement({heading, description, name})
-          console.log(response)
+
           if(response?.data[0]?.error){
-            const message = response?.data[0]?.error
+            const message = response.data[0].error
             showErrorToastMessage(message)
           }
           else if(response?.data[0]?.created){
-            const message = response?.data[0]?.created
+            const message = response.data[0].created
             showSuccessToastMessage(message)
           } 
 

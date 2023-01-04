@@ -32,11 +32,11 @@ const AnnouncementCard= ({ heading, description, picture, left, id}) =>{
         <div className="row featurette">
             <div className={ left ? "col-md-7 order-md-2" : "col-md-7"}>
                 <h2 className="featurette-heading fw-normal lh-1">{heading}</h2>
-                {role == "creator" ? <button type="button" onClick={deleteAnnouncementById} className="btn btn-danger">Delete</button>: <div></div>}
+                {role === "creator" ? <button type="button" onClick={deleteAnnouncementById} className="btn btn-danger">Delete</button>: <div></div>}
                 <p className="lead">{description}</p>
             </div>
             <div className={left ? "col-md-5 order-md-1": "col-md-5"}>
-                <img className="bd-placeholder-img bd-placeholder-img-lg img-fluid mx-auto" src={picture} role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"></img>
+                <img className="bd-placeholder-img bd-placeholder-img-lg img-fluid mx-auto" alt="announcementImage" src={picture}></img>
             </div>
         </div>
 

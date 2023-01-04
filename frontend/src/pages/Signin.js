@@ -31,13 +31,13 @@ const SignIn= () =>{
       const response = await login({email,password})
       
       if(response?.data[0]?.error){
-        const message = response?.data[0]?.error
+        const message = response.data[0].error
         showErrorToastMessage(message)
       }
       else if(response?.data[0]?.token){
-        dispatch(setCredentials({...response?.data[0]}))
-        dispatch(setUser({...response?.data[0]}))
-        dispatch(setProducts({...response?.data[0]}))
+        dispatch(setCredentials({...response.data[0]}))
+        dispatch(setUser({...response.data[0]}))
+        dispatch(setProducts({...response.data[0]}))
         setEmail('')
         setPassword('')
         navigate('/home')

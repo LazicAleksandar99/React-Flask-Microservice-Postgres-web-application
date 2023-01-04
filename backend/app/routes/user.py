@@ -73,6 +73,12 @@ def change_user_profile():
     email = request.json['email']
     password = request.json['password']
     birthday = request.json['birthday']
+    password_again = request.json['password_again']
+
+    user = User.query.filter_by(email=current_user).first()
+
+    if not user:
+        return jsonify({"error": "Token not valid"},401)
 
     if not email or not email.strip() or len(email) < 3:
         return jsonify({"error": "Body of your request has been changed"},401)
@@ -82,13 +88,14 @@ def change_user_profile():
         return jsonify({"error": "You didnt input valid lastname "},401)
     elif not birthday:
         return jsonify({"error": "You didnt input valid birthday "},401)
-    
+    elif password != password_again:
+        return jsonify({"error": "Your password doesn't match!"},401)
 
-    user = User.query.filter_by(email=current_user).first()
+    old_user = User.query.filter_by(email=email).first()
 
-    if not user:
-        return jsonify({"error": "Token not valid"},401)
-    #ovdje sad ifovi, da li ime nesto ima u sebi, prezime isto, email da li vec postoji da li je validan email, password da li se vec podudara b day da li veci manji i 18+ godina
+    if old_user:
+        if email != current_user:
+            return jsonify({"error": "User email already exists"}, 400)
 
     user.name = name.strip()
     user.last_name = last_name.strip()
@@ -102,5 +109,4 @@ def change_user_profile():
 
     additional_claims = {"role": user.role}
     token = create_access_token(identity=email,additional_claims = additional_claims)
-    #the_user = user_schema.dump(user) # mora shema jer preko query.all ne moze jesinify
     return jsonify({'token': token}, 200)

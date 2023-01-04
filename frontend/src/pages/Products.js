@@ -15,10 +15,9 @@ const Products= () =>{
   const [searchInput, setSearchInput] = useState('');
   const [selectedPrice, setSelectedPrice] = useState([1, 10000]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(4);
+  const [postsPerPage] = useState(4);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
-
   const [deleteProduct] = useDeleteProductMutation()
 
   const dispatch = useDispatch()
@@ -48,10 +47,9 @@ const Products= () =>{
         else if (response?.date[0]?.deleted){
           const message = response.data[0].deleted      
           showErrorToastMessage(message)
-          dispatch(setProducts({...response?.data[0]}))
-          setProductsData(response?.data[0].products)
-          setProductsFullData(response?.data[0].products)
-
+          dispatch(setProducts({...response.data[0]}))
+          setProductsData(response.data[0].products)
+          setProductsFullData(response.data[0].products)
         }
     }catch(error){
         showErrorToastMessage(error)

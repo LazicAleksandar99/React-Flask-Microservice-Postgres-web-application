@@ -9,7 +9,7 @@ import { showErrorToastMessage } from '../components/ToastNotifications';
 const Users= () =>{
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(4);
+    const [postsPerPage] = useState(4);
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
     let content  

@@ -1,7 +1,6 @@
 from app.extensions import db
 from marshmallow import Schema, fields
 from werkzeug.security import generate_password_hash, check_password_hash
-#//customer, creator, admin
 
 class User(db.Model):
     account_id = db.Column(db.Integer, primary_key=True)
@@ -31,11 +30,9 @@ class User(db.Model):
         return generate_password_hash(password)
 
 class UserSchema(Schema):
-    #account_id = fields.Number()
     name = fields.Str()
     last_name = fields.Str()
     email = fields.Str()
     birthday = fields.DateTime()
-    #password = fields.Str()
     role = fields.Str()
     verified = fields.Str()

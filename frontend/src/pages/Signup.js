@@ -39,7 +39,7 @@ const SignUp= () =>{
       const response = await register({name, last_name, email, birthday, password, password_again: passwordAgain,type})
 
       if(response?.data[0]?.error){
-        const message = response?.data[0]?.error
+        const message = response.data[0].error
         showErrorToastMessage(message)
       }
       else{
