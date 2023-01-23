@@ -1,21 +1,19 @@
 version: '3'
 services:
   web: 
-    build: backend #u koji folder da udje i nadje Dockerfile
-    # flask requires SIGINT to stop gracefully
-    # (default stop signal from Compose is SIGTERM)
+    build: backend
     stop_signal: SIGINT
     ports:
       - '5000:5000'
     environment: 
       FLASK_APP: app
       FLASK_DEBUG: true
-      FLASK_ENV: development #lazy load u development modu zato je dobar
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres  #://user:password@db je ime 16 linija:5432/DB_name
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
       CLOUDINARY_URL: cloudinary://319854841752268:HQa86nLhkmp2RIL9sLEaHp8GCEE@dfms5eutq
       SECRET_KEY: My_secret_key
     volumes:
-      - ./backend:/app          #moj kod gdje se nalazi mapiram na workdir fodler flask
+      - ./backend:/app
     depends_on:
       - db
   react:

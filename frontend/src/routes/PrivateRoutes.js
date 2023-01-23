@@ -9,8 +9,6 @@ import { selectCurrentToken } from '../context/authSlice';
 const PrivateRoutes = ({ allowedRoles }) =>{
     const token = useSelector(selectCurrentToken)  
     const location = useLocation();
-
-  //  const role = auth?.token ? JSON.parse(atob(auth.token.split('.')[1])).role : []
     const role = token ? JSON.parse(atob(token.split('.')[1])).role : []
     return (
           allowedRoles?.includes(role)
