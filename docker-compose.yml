@@ -1,6 +1,6 @@
 version: '3'
 services:
-  web: 
+  backend_server: 
     build: backend
     stop_signal: SIGINT
     ports:
@@ -9,22 +9,22 @@ services:
       FLASK_APP: app
       FLASK_DEBUG: true
       FLASK_ENV: development
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres
       CLOUDINARY_URL: cloudinary://319854841752268:HQa86nLhkmp2RIL9sLEaHp8GCEE@dfms5eutq
       SECRET_KEY: My_secret_key
     volumes:
       - ./backend:/app
     depends_on:
-      - db
-  react:
+      - database
+  veb_server:
    build: frontend
    ports:
      - '3000:3000'
    volumes:
      - ./frontend:/app/frontend
    depends_on:
-     - web
-  db:
+     - backend_server
+  database:
     image: postgres
     ports: 
       - '5432:5432'
